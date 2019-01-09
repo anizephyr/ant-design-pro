@@ -41,6 +41,29 @@ export default [
           },
         ],
       },
+      //基本信息管理
+      {
+        path: '/basicinfo',
+        name: 'basicinfo',
+        icon: 'table',
+        routes: [
+          {
+            path: '/basicinfo/infolist',
+            name: 'infolist',
+            component: './BasicInfo/InfoList',
+          },
+          {
+            path: '/basicinfo/modifyhis',
+            name: 'modifyhis',
+            component: './BasicInfo/ModifyHisList',
+          },
+          {
+            path: '/basicinfo/markhis',
+            name: 'markhis',
+            component: './BasicInfo/MarkHisList',
+          },
+        ],
+      },
       // forms
       {
         path: '/form',

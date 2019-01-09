@@ -1,6 +1,6 @@
 export default {
   'menu.home': '首页',
-  'menu.dashboard': 'Dashboard',
+  'menu.dashboard': '综合展示',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
@@ -35,4 +35,8 @@ export default {
   'menu.account.settings': '个人设置',
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
+  'menu.basicinfo': '人员基本信息',
+  'menu.basicinfo.infolist': '信息查询',
+  'menu.basicinfo.modifyhis': '岗位变更',
+  'menu.basicinfo.markhis': '积分管理',
 };

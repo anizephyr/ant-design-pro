@@ -8,15 +8,9 @@ const FooterView = () => (
     <GlobalFooter
       links={[
         {
-          key: 'Pro 首页',
-          title: 'Pro 首页',
-          href: 'https://pro.ant.design',
-          blankTarget: true,
-        },
-        {
-          key: 'github',
-          title: <Icon type="github" />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          key: 'CMBC 首页',
+          title: 'CMBC 首页',
+          href: 'http://www.cmbc.com.cn',
           blankTarget: true,
         },
         {
@@ -28,7 +22,7 @@ const FooterView = () => (
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+          Copyright <Icon type="copyright" /> 2018 民生银行长沙分行科技部
         </Fragment>
       }
     />

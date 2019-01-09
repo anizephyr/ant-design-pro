@@ -15,6 +15,8 @@ export default {
   'layout.user.link.help': '帮助',
   'layout.user.link.privacy': '隐私',
   'layout.user.link.terms': '条款',
+  'layout.user.link.suggest': '建议',
+  'layout.user.link.team': '团队',
   'app.home.introduce': '介绍',
   'app.forms.basic.title': '基础表单',
   'app.forms.basic.description':
