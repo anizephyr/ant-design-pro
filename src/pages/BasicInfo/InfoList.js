@@ -222,9 +222,11 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       formVals: {
-        name: props.values.name,
-        desc: props.values.desc,
-        key: props.values.key,
+        JGMC: props.values.JGMC,
+        JGDM: props.values.JGDM,
+        RYMC: props.values.RYMC,
+        RYDM: props.values.RYDM,
+
         target: '0',
         template: '0',
         type: '1',
@@ -311,32 +313,6 @@ class UpdateForm extends PureComponent {
         </FormItem>,
       ];
     }
-    if (currentStep === 2) {
-      return [
-        <FormItem key="time" {...this.formLayout} label="开始时间">
-          {form.getFieldDecorator('time', {
-            rules: [{ required: true, message: '请选择开始时间！' }],
-          })(
-            <DatePicker
-              style={{ width: '100%' }}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
-              placeholder="选择开始时间"
-            />
-          )}
-        </FormItem>,
-        <FormItem key="frequency" {...this.formLayout} label="调度周期">
-          {form.getFieldDecorator('frequency', {
-            initialValue: formVals.frequency,
-          })(
-            <Select style={{ width: '100%' }}>
-              <Option value="month">月</Option>
-              <Option value="week">周</Option>
-            </Select>
-          )}
-        </FormItem>,
-      ];
-    }
     return [
       <FormItem key="name" {...this.formLayout} label="规则名称">
         {form.getFieldDecorator('name', {
@@ -356,19 +332,6 @@ class UpdateForm extends PureComponent {
   renderFooter = currentStep => {
     const { handleUpdateModalVisible, values } = this.props;
     if (currentStep === 1) {
-      return [
-        <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
-          上一步
-        </Button>,
-        <Button key="cancel" onClick={() => handleUpdateModalVisible(false, values)}>
-          取消
-        </Button>,
-        <Button key="forward" type="primary" onClick={() => this.handleNext(currentStep)}>
-          下一步
-        </Button>,
-      ];
-    }
-    if (currentStep === 2) {
       return [
         <Button key="back" style={{ float: 'left' }} onClick={this.backward}>
           上一步
@@ -400,7 +363,7 @@ class UpdateForm extends PureComponent {
         width={640}
         bodyStyle={{ padding: '32px 40px 48px' }}
         destroyOnClose
-        title="规则配置"
+        title={values.RYDM}
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
         onCancel={() => handleUpdateModalVisible(false, values)}
@@ -409,7 +372,6 @@ class UpdateForm extends PureComponent {
         <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
           <Step title="基本信息" />
           <Step title="配置规则属性" />
-          <Step title="设定调度周期" />
         </Steps>
         {this.renderContent(currentStep, formVals)}
       </Modal>
@@ -566,7 +528,7 @@ class InfoList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>删除</a>
+          <a onClick={() => this.handleSingleDelete(record)}>删除</a>
         </Fragment>
       ),
     },
@@ -627,14 +589,13 @@ class InfoList extends PureComponent {
   handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
-
     if (selectedRows.length === 0) return;
     switch (e.key) {
       case 'remove':
         dispatch({
           type: 'infolist/remove',
           payload: {
-            key: selectedRows.map(row => row.key),
+            key: selectedRows.map(row => row.RYDM),
           },
           callback: () => {
             this.setState({
@@ -647,7 +608,7 @@ class InfoList extends PureComponent {
         dispatch({
           type: 'infolist/update',
           payload: {
-            key: selectedRows.map(row => row.key),
+            key: selectedRows.map(row => row.RYDM),
           },
           callback: () => {
             this.setState({
@@ -659,6 +620,21 @@ class InfoList extends PureComponent {
       default:
         break;
     }
+  };
+
+  handleSingleDelete = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'infolist/remove',
+      payload: {
+        key: [record].map(row => row.RYDM),
+      },
+      callback: () => {
+        this.setState({
+          selectedRows: [],
+        });
+      },
+    });
   };
 
   handleSelectRows = rows => {
@@ -850,7 +826,7 @@ class InfoList extends PureComponent {
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-        <Menu.Item key="update">批量编辑</Menu.Item>
+        {/* <Menu.Item key="update">批量编辑</Menu.Item> */}
         <Menu.Item key="remove">批量删除</Menu.Item>
       </Menu>
     );
