@@ -49,16 +49,161 @@ const CreateForm = Form.create()(props => {
   };
   return (
     <Modal
+      width={700}
       destroyOnClose
-      title="新建规则"
+      title="人员录入"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
-        })(<Input placeholder="请输入" />)}
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构名称">
+        {form.getFieldDecorator('JGMC', {
+          rules: [
+            { required: true, message: '机构名不能为空！' },
+            { max: 20, message: '机构名称过长！' },
+          ],
+        })(<Input placeholder="请输入机构名称" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构代码">
+        {form.getFieldDecorator('JGDM', {
+          rules: [{ required: true, message: '机构代码不能为空！' }],
+        })(<Input placeholder="请输入机构代码" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="姓名">
+        {form.getFieldDecorator('RYMC', {
+          rules: [{ required: true, message: '姓名不能为空！' }],
+        })(<Input placeholder="请输入姓名" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="十位工号">
+        {form.getFieldDecorator('RYDM', {
+          rules: [{ required: true, message: '十位工号错误！', len: 10 }],
+        })(<Input placeholder="请输入十位工号" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="性别">
+        {form.getFieldDecorator('XB', {
+          rules: [{ required: true, message: '请选择性别！' }],
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="男">男</Option>
+            <Option value="女">女</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="身份证号">
+        {form.getFieldDecorator('SFZH', {
+          rules: [{ required: true, message: '身份证长度错误！', len: 13 }],
+        })(<Input placeholder="请输入身份证号码" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="联系电话">
+        {form.getFieldDecorator('LXDH')(<Input placeholder="请输入联系电话" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="员工类型">
+        {form.getFieldDecorator('YGLX', {
+          rules: [{ required: true, message: '请选择员工类型' }],
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="正式">正式</Option>
+            <Option value="派遣">派遣</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="金融工作从业时间">
+        {form.getFieldDecorator('JRGZCYSJ', {
+          rules: [{ required: true, message: '请选择从业时间！' }],
+        })(
+          <DatePicker
+            style={{ width: '100%' }}
+            showTime
+            format="YYYY-MM-DD"
+            laceholder="选择从业时间"
+          />
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="本行运营岗位上岗时间">
+        {form.getFieldDecorator('BHYYGWSGSJ', {
+          rules: [{ required: true, message: '请选择运营岗位上岗时间！' }],
+        })(
+          <DatePicker
+            style={{ width: '100%' }}
+            showTime
+            format="YYYY-MM-DD"
+            laceholder="选择运营岗位上岗时间"
+          />
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="入行时间">
+        {form.getFieldDecorator('RHSJ', {
+          rules: [{ required: true, message: '请选择入行时间！' }],
+        })(
+          <DatePicker
+            style={{ width: '100%' }}
+            showTime
+            format="YYYY-MM-DD"
+            laceholder="选择入行时间"
+          />
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位">
+        {form.getFieldDecorator('XGW', {
+          rules: [{ required: true, message: '现岗位不能为空！' }],
+        })(<Input placeholder="请输入现岗位" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位上岗时间">
+        {form.getFieldDecorator('XGWSGSJ', {
+          rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
+        })(
+          <DatePicker
+            style={{ width: '100%' }}
+            showTime
+            format="YYYY-MM-DD"
+            laceholder="选择现岗位上岗时间"
+          />
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="第一学历">
+        {form.getFieldDecorator('DYXL', {
+          rules: [{ required: true, message: '输入不能为空！' }],
+        })(<Input placeholder="请输入第一学历" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="最高学历">
+        {form.getFieldDecorator('ZGXL', {
+          rules: [{ required: true, message: '输入不能为空！' }],
+        })(<Input placeholder="请输入最高学历" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="是否全日制">
+        {form.getFieldDecorator('SFQRZ', {
+          rules: [{ required: true, message: '选项不能为空！' }],
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="是">是</Option>
+            <Option value="否">否</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="婚姻情况">
+        {form.getFieldDecorator('HYQK', {
+          rules: [{ required: true, message: '选项不能为空！' }],
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="已婚">已婚</Option>
+            <Option value="未婚">未婚</Option>
+            <Option value="离异">离异</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="生育情况">
+        {form.getFieldDecorator('SYQK', {
+          rules: [{ required: true, message: '选项不能为空！' }],
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="0">0</Option>
+            <Option value="1">1</Option>
+            <Option value="2">2</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="家庭住址">
+        {form.getFieldDecorator('JTZZ')(<Input placeholder="请输入家庭住址" />)}
       </FormItem>
     </Modal>
   );
@@ -564,7 +709,25 @@ class InfoList extends PureComponent {
     dispatch({
       type: 'infolist/add',
       payload: {
-        desc: fields.desc,
+        JGMC: fields.JGMC,
+        RYMC: fields.RYMC,
+        JGDM: fields.JGDM,
+        RYDM: fields.RYDM,
+        XB: fields.XB,
+        SFZH: fields.SFZH,
+        LXDH: fields.LXDH,
+        YGLX: fields.YGLX,
+        JRGZCYSJ: fields.JRGZCYSJ,
+        BHYYGWSGSJ: fields.BHYYGWSGSJ,
+        RHSJ: fields.RHSJ,
+        XGW: fields.XGW,
+        XGWSGSJ: fields.XGWSGSJ,
+        DYXL: fields.DYXL,
+        ZGXL: fields.ZGXL,
+        SFQRZ: fields.SFQRZ,
+        HYQK: fields.HYQK,
+        SYQK: fields.SYQK,
+        JTZZ: fields.JTZZ,
       },
     });
 
