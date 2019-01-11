@@ -126,3 +126,37 @@ export async function queryNotices(params = {}) {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
+
+export async function queryInfoList(params) {
+  return request(`/api/infolist?${stringify(params)}`);
+}
+
+export async function removeInfoList(params) {
+  return request('/api/infolist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
+export async function addInfoList(params) {
+  return request('/api/infolist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'add',
+    },
+  });
+}
+
+export async function updateInfoList(params) {
+  return request('/api/infolist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'update',
+    },
+  });
+}

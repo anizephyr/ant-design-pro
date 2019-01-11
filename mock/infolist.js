@@ -4,6 +4,23 @@ import { parse } from 'url';
 let tableListDataSource = [];
 for (let i = 0; i < 46; i += 1) {
   tableListDataSource.push({
+    RYMC: '徐立人',
+    RYDM: Math.floor(Math.random() * 1000000000),
+    XB: '男',
+    SFZH: '213113394811015464',
+    JGMC: '长沙分行',
+    JGDM: '3100',
+    LXDH: '12673840145',
+    YGLX: '正式',
+    JRGZCYSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+    BHYYGWSGSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+    RHSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+    XGW: '科技开发岗',
+    XGWSGSJ: '2008-12-09',
+    HYQK: '已婚',
+    SYQK: '1',
+    JTZZ: '滨江路129号XX大厦3楼',
+    ZT: '正常',
     key: i,
     disabled: i % 6 === 0,
     href: 'https://ant.design',
@@ -23,7 +40,7 @@ for (let i = 0; i < 46; i += 1) {
   });
 }
 
-function getRule(req, res, u) {
+function getInfoList(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -75,23 +92,44 @@ function getRule(req, res, u) {
   return res.json(result);
 }
 
-function postRule(req, res, u, b) {
+function postInfoList(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
   }
 
   const body = (b && b.body) || req.body;
-  const { method, name, desc, key } = body;
-  console.log(body);
+  const { method, addData, updateData, deleteData } = body;
+  console.log(addData);
+  console.log(updateData);
+  console.log(deleteData);
   switch (method) {
     /* eslint no-case-declarations:0 */
     case 'delete':
-      tableListDataSource = tableListDataSource.filter(item => key.indexOf(item.key) === -1);
+      tableListDataSource = tableListDataSource.filter(
+        item => deleteData.indexOf(item.RYDM) === -1
+      );
       break;
-    case 'post':
+    case 'add':
       const i = Math.ceil(Math.random() * 10000);
       tableListDataSource.unshift({
+        RYMC: '徐立人',
+        RYDM: Math.floor(Math.random() * 1000000000),
+        XB: '男',
+        SFZH: '213113394811015464',
+        JGMC: '长沙分行',
+        JGDM: '3100',
+        LXDH: '12673840145',
+        YGLX: '正式',
+        JRGZCYSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+        BHYYGWSGSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+        RHSJ: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
+        XGW: '科技开发岗',
+        XGWSGSJ: '2008-12-09',
+        HYQK: '已婚',
+        SYQK: '1',
+        JTZZ: '滨江路129号XX大厦3楼',
+        ZT: '正常',
         key: i,
         href: 'https://ant.design',
         avatar: [
@@ -101,7 +139,7 @@ function postRule(req, res, u, b) {
         name: `TradeCode ${i}`,
         title: `一个任务名称 ${i}`,
         owner: '曲丽丽',
-        desc,
+        desc: '123',
         callNo: Math.floor(Math.random() * 1000),
         status: Math.floor(Math.random() * 10) % 2,
         updatedAt: new Date(),
@@ -111,8 +149,8 @@ function postRule(req, res, u, b) {
       break;
     case 'update':
       tableListDataSource = tableListDataSource.map(item => {
-        if (item.key === key) {
-          Object.assign(item, { desc, name });
+        if (item.RYDM === updateData.RYDM) {
+          Object.assign(item, {});
           return item;
         }
         return item;
@@ -133,6 +171,6 @@ function postRule(req, res, u, b) {
 }
 
 export default {
-  'GET /api/rule': getRule,
-  'POST /api/rule': postRule,
+  'GET /api/infolist': getInfoList,
+  'POST /api/infolist': postInfoList,
 };

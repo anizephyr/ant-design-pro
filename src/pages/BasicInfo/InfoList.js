@@ -19,7 +19,6 @@ import {
   Badge,
   Divider,
   Steps,
-  Radio,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -30,7 +29,6 @@ const FormItem = Form.Item;
 const { Step } = Steps;
 const { TextArea } = Input;
 const { Option } = Select;
-const RadioGroup = Radio.Group;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -91,7 +89,7 @@ const CreateForm = Form.create()(props => {
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="身份证号">
         {form.getFieldDecorator('SFZH', {
-          rules: [{ required: true, message: '身份证长度错误！', len: 13 }],
+          rules: [{ required: true, message: '身份证长度错误！', len: 18 }],
         })(<Input placeholder="请输入身份证号码" />)}
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="联系电话">
@@ -110,14 +108,7 @@ const CreateForm = Form.create()(props => {
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="金融工作从业时间">
         {form.getFieldDecorator('JRGZCYSJ', {
           rules: [{ required: true, message: '请选择从业时间！' }],
-        })(
-          <DatePicker
-            style={{ width: '100%' }}
-            showTime
-            format="YYYY-MM-DD"
-            laceholder="选择从业时间"
-          />
-        )}
+        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择从业时间" />)}
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="本行运营岗位上岗时间">
         {form.getFieldDecorator('BHYYGWSGSJ', {
@@ -125,7 +116,6 @@ const CreateForm = Form.create()(props => {
         })(
           <DatePicker
             style={{ width: '100%' }}
-            showTime
             format="YYYY-MM-DD"
             laceholder="选择运营岗位上岗时间"
           />
@@ -134,14 +124,7 @@ const CreateForm = Form.create()(props => {
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="入行时间">
         {form.getFieldDecorator('RHSJ', {
           rules: [{ required: true, message: '请选择入行时间！' }],
-        })(
-          <DatePicker
-            style={{ width: '100%' }}
-            showTime
-            format="YYYY-MM-DD"
-            laceholder="选择入行时间"
-          />
-        )}
+        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择入行时间" />)}
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位">
         {form.getFieldDecorator('XGW', {
@@ -154,7 +137,6 @@ const CreateForm = Form.create()(props => {
         })(
           <DatePicker
             style={{ width: '100%' }}
-            showTime
             format="YYYY-MM-DD"
             laceholder="选择现岗位上岗时间"
           />
@@ -193,17 +175,11 @@ const CreateForm = Form.create()(props => {
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="生育情况">
         {form.getFieldDecorator('SYQK', {
-          rules: [{ required: true, message: '选项不能为空！' }],
-        })(
-          <Select placeholder="请选择" style={{ width: '100%' }}>
-            <Option value="0">0</Option>
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-          </Select>
-        )}
+          rules: [{ required: true, message: '项目不能为空！' }],
+        })(<Input placeholder="请输入生育情况" />)}
       </FormItem>
       <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="家庭住址">
-        {form.getFieldDecorator('JTZZ')(<Input placeholder="请输入家庭住址" />)}
+        {form.getFieldDecorator('JTZZ')(<TextArea row={2} placeholder="请输入家庭住址" />)}
       </FormItem>
     </Modal>
   );
@@ -222,17 +198,19 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       formVals: {
-        JGMC: props.values.JGMC,
-        JGDM: props.values.JGDM,
         RYMC: props.values.RYMC,
         RYDM: props.values.RYDM,
-
-        target: '0',
-        template: '0',
-        type: '1',
-        time: '',
-        frequency: 'month',
+        JGMC: props.values.JGMC,
+        JGDM: props.values.JGDM,
+        LXDH: props.values.LXDH,
+        YGLX: props.values.YGLX,
+        XGW: props.values.XGW,
+        XGWSGSJ: moment(props.values.XGWSGSJ),
+        HYQK: props.values.HYQK,
+        SYQK: props.values.SYQK,
+        JTZZ: props.values.JTZZ,
       },
+      updateVals: {},
       currentStep: 0,
     };
 
@@ -247,16 +225,20 @@ class UpdateForm extends PureComponent {
     const { formVals: oldValue } = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const formVals = { ...oldValue, ...fieldsValue };
+      const updateVals = this.findDiff(oldValue, fieldsValue);
+      if (Object.keys(updateVals).length === 0) return;
       this.setState(
         {
-          formVals,
+          updateVals,
         },
         () => {
-          if (currentStep < 2) {
+          if (currentStep < 1) {
             this.forward();
           } else {
-            handleUpdate(formVals);
+            const updateData = { ...updateVals, RYDM: oldValue.RYDM };
+            if (updateData.XGWSGSJ !== undefined)
+              updateData.XGWSGSJ = moment(updateData.XGWSGSJ).format('YYYY-MM-DD');
+            handleUpdate(updateData);
           }
         }
       );
@@ -277,54 +259,119 @@ class UpdateForm extends PureComponent {
     });
   };
 
+  findDiff = (oldVals, fieldsValue) => {
+    const fieldsName = Object.keys(fieldsValue);
+    const diffs = {};
+    for (let i = 0; i < fieldsName.length; i += 1) {
+      const fieldName = fieldsName[i];
+
+      if (fieldsValue[fieldName] !== oldVals[fieldName]) {
+        diffs[fieldName] = fieldsValue[fieldName];
+      }
+    }
+
+    return diffs;
+  };
+
   renderContent = (currentStep, formVals) => {
     const { form } = this.props;
     if (currentStep === 1) {
-      return [
-        <FormItem key="target" {...this.formLayout} label="监控对象">
-          {form.getFieldDecorator('target', {
-            initialValue: formVals.target,
-          })(
-            <Select style={{ width: '100%' }}>
-              <Option value="0">表一</Option>
-              <Option value="1">表二</Option>
-            </Select>
-          )}
-        </FormItem>,
-        <FormItem key="template" {...this.formLayout} label="规则模板">
-          {form.getFieldDecorator('template', {
-            initialValue: formVals.template,
-          })(
-            <Select style={{ width: '100%' }}>
-              <Option value="0">规则模板一</Option>
-              <Option value="1">规则模板二</Option>
-            </Select>
-          )}
-        </FormItem>,
-        <FormItem key="type" {...this.formLayout} label="规则类型">
-          {form.getFieldDecorator('type', {
-            initialValue: formVals.type,
-          })(
-            <RadioGroup>
-              <Radio value="0">强</Radio>
-              <Radio value="1">弱</Radio>
-            </RadioGroup>
-          )}
-        </FormItem>,
-      ];
+      const { updateVals } = this.state;
+      const formItems = [];
+      const updateNames = Object.keys(updateVals);
+      for (let i = 0; i < updateNames.length; i += 1) {
+        formItems.push(
+          <FormItem
+            key={updateNames[i]}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 15 }}
+            label={updateNames[i]}
+          >
+            {form.getFieldDecorator(updateNames[i], { initialValue: updateVals[updateNames[i]] })(
+              <Input />
+            )}
+          </FormItem>
+        );
+      }
+      return formItems;
     }
     return [
-      <FormItem key="name" {...this.formLayout} label="规则名称">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '请输入规则名称！' }],
-          initialValue: formVals.name,
-        })(<Input placeholder="请输入" />)}
+      <FormItem key="JGMC" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构名称">
+        {form.getFieldDecorator('JGMC', {
+          rules: [
+            { required: true, message: '机构名不能为空！' },
+            { max: 20, message: '机构名称过长！' },
+          ],
+          initialValue: formVals.JGMC,
+        })(<Input placeholder="请输入机构名称" />)}
       </FormItem>,
-      <FormItem key="desc" {...this.formLayout} label="规则描述">
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: '请输入至少五个字符的规则描述！', min: 5 }],
-          initialValue: formVals.desc,
-        })(<TextArea rows={4} placeholder="请输入至少五个字符" />)}
+      <FormItem key="JGDM" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构代码">
+        {form.getFieldDecorator('JGDM', {
+          rules: [{ required: true, message: '机构代码不能为空！' }],
+          initialValue: formVals.JGDM,
+        })(<Input placeholder="请输入机构代码" />)}
+      </FormItem>,
+      <FormItem key="LXDH" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="联系电话">
+        {form.getFieldDecorator('LXDH', { initialValue: formVals.LXDH })(
+          <Input placeholder="请输入联系电话" />
+        )}
+      </FormItem>,
+      <FormItem key="YGLX" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="员工类型">
+        {form.getFieldDecorator('YGLX', {
+          rules: [{ required: true, message: '请选择员工类型' }],
+          initialValue: formVals.YGLX,
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="正式">正式</Option>
+            <Option value="派遣">派遣</Option>
+          </Select>
+        )}
+      </FormItem>,
+      <FormItem key="XGW" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位">
+        {form.getFieldDecorator('XGW', {
+          rules: [{ required: true, message: '现岗位不能为空！' }],
+          initialValue: formVals.XGW,
+        })(<Input placeholder="请输入现岗位" />)}
+      </FormItem>,
+      <FormItem
+        key="XGWSGSJ"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 15 }}
+        label="现岗位上岗时间"
+      >
+        {form.getFieldDecorator('XGWSGSJ', {
+          rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
+          initialValue: formVals.XGWSGSJ,
+        })(
+          <DatePicker
+            style={{ width: '100%' }}
+            format="YYYY-MM-DD"
+            laceholder="选择现岗位上岗时间"
+          />
+        )}
+      </FormItem>,
+      <FormItem key="HYQK" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="婚姻情况">
+        {form.getFieldDecorator('HYQK', {
+          rules: [{ required: true, message: '选项不能为空！' }],
+          initialValue: formVals.HYQK,
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="已婚">已婚</Option>
+            <Option value="未婚">未婚</Option>
+            <Option value="离异">离异</Option>
+          </Select>
+        )}
+      </FormItem>,
+      <FormItem key="SYQK" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="生育情况">
+        {form.getFieldDecorator('SYQK', {
+          rules: [{ required: true, message: '项目不能为空！' }],
+          initialValue: formVals.SYQK,
+        })(<Input placeholder="请输入生育情况" />)}
+      </FormItem>,
+      <FormItem key="JTZZ" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="家庭住址">
+        {form.getFieldDecorator('JTZZ', { initialValue: formVals.JTZZ })(
+          <TextArea row={2} placeholder="请输入家庭住址" />
+        )}
       </FormItem>,
     ];
   };
@@ -363,15 +410,15 @@ class UpdateForm extends PureComponent {
         width={640}
         bodyStyle={{ padding: '32px 40px 48px' }}
         destroyOnClose
-        title={values.RYDM}
+        title={`${values.RYMC}-${values.RYDM}`}
         visible={updateModalVisible}
         footer={this.renderFooter(currentStep)}
         onCancel={() => handleUpdateModalVisible(false, values)}
         afterClose={() => handleUpdateModalVisible()}
       >
         <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
-          <Step title="基本信息" />
-          <Step title="配置规则属性" />
+          <Step title="编辑信息" />
+          <Step title="确认信息" />
         </Steps>
         {this.renderContent(currentStep, formVals)}
       </Modal>
@@ -560,7 +607,6 @@ class InfoList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
     dispatch({
       type: 'infolist/fetch',
       payload: params,
@@ -595,7 +641,7 @@ class InfoList extends PureComponent {
         dispatch({
           type: 'infolist/remove',
           payload: {
-            key: selectedRows.map(row => row.RYDM),
+            deleteData: selectedRows.map(row => row.RYDM),
           },
           callback: () => {
             this.setState({
@@ -608,7 +654,7 @@ class InfoList extends PureComponent {
         dispatch({
           type: 'infolist/update',
           payload: {
-            key: selectedRows.map(row => row.RYDM),
+            updateDatas: '',
           },
           callback: () => {
             this.setState({
@@ -627,7 +673,7 @@ class InfoList extends PureComponent {
     dispatch({
       type: 'infolist/remove',
       payload: {
-        key: [record].map(row => row.RYDM),
+        deleteData: [record].map(row => row.RYDM),
       },
       callback: () => {
         this.setState({
@@ -651,18 +697,18 @@ class InfoList extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      const values = {
+      const params = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
-        formValues: values,
+        formValues: params,
       });
 
       dispatch({
         type: 'infolist/fetch',
-        payload: values,
+        payload: params,
       });
     });
   };
@@ -685,25 +731,27 @@ class InfoList extends PureComponent {
     dispatch({
       type: 'infolist/add',
       payload: {
-        JGMC: fields.JGMC,
-        RYMC: fields.RYMC,
-        JGDM: fields.JGDM,
-        RYDM: fields.RYDM,
-        XB: fields.XB,
-        SFZH: fields.SFZH,
-        LXDH: fields.LXDH,
-        YGLX: fields.YGLX,
-        JRGZCYSJ: fields.JRGZCYSJ,
-        BHYYGWSGSJ: fields.BHYYGWSGSJ,
-        RHSJ: fields.RHSJ,
-        XGW: fields.XGW,
-        XGWSGSJ: fields.XGWSGSJ,
-        DYXL: fields.DYXL,
-        ZGXL: fields.ZGXL,
-        SFQRZ: fields.SFQRZ,
-        HYQK: fields.HYQK,
-        SYQK: fields.SYQK,
-        JTZZ: fields.JTZZ,
+        addData: {
+          JGMC: fields.JGMC,
+          RYMC: fields.RYMC,
+          JGDM: fields.JGDM,
+          RYDM: fields.RYDM,
+          XB: fields.XB,
+          SFZH: fields.SFZH,
+          LXDH: fields.LXDH,
+          YGLX: fields.YGLX,
+          JRGZCYSJ: moment(fields.JRGZCYSJ).format('YYYY-MM-DD'),
+          BHYYGWSGSJ: moment(fields.BHYYGWSGSJ).format('YYYY-MM-DD'),
+          RHSJ: moment(fields.RHSJ).format('YYYY-MM-DD'),
+          XGW: fields.XGW,
+          XGWSGSJ: moment(fields.XGWSGSJ).format('YYYY-MM-DD'),
+          DYXL: fields.DYXL,
+          ZGXL: fields.ZGXL,
+          SFQRZ: fields.SFQRZ,
+          HYQK: fields.HYQK,
+          SYQK: fields.SYQK,
+          JTZZ: fields.JTZZ,
+        },
       },
     });
 
@@ -716,9 +764,7 @@ class InfoList extends PureComponent {
     dispatch({
       type: 'infolist/update',
       payload: {
-        name: fields.name,
-        desc: fields.desc,
-        key: fields.key,
+        updateData: fields,
       },
     });
 
