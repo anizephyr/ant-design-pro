@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
 import {
   Table,
   Row,
@@ -12,12 +11,11 @@ import {
   Icon,
   Button,
   /* InputNumber, */
-  Badge,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './ModifyHisList.less';
+import styles from './MarkHisManage.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -25,16 +23,14 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['deleted', 'normal'];
-const status = ['已删除', '正常'];
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ modifyhislist, loading }) => ({
-  modifyhislist,
-  loading: loading.models.modifyhislist,
+@connect(({ markhislist, loading }) => ({
+  markhislist,
+  loading: loading.models.markhislist,
 }))
 @Form.create()
-class ModifyHisList extends PureComponent {
+class MarkHisManage extends PureComponent {
   state = {
     expandForm: false,
     expandRowByClick: true,
@@ -43,6 +39,23 @@ class ModifyHisList extends PureComponent {
   };
 
   columns = [
+    {
+      title: '积分时段',
+      dataIndex: 'JFSD',
+      width: 125,
+    },
+    {
+      title: '机构代码',
+      dataIndex: 'JGDM',
+      sorter: true,
+      width: 125,
+    },
+    {
+      title: '人员代码',
+      dataIndex: 'RYDM',
+      sorter: true,
+      width: 125,
+    },
     {
       title: '机构名称',
       dataIndex: 'JGMC',
@@ -56,67 +69,21 @@ class ModifyHisList extends PureComponent {
       width: 125,
     },
     {
-      title: '机构代码',
-      dataIndex: 'JGDM',
-      sorter: true,
-      width: 150,
-    },
-    {
-      title: '人员代码',
-      dataIndex: 'RYDM',
-      sorter: true,
-      width: 125,
-    },
-    {
-      title: '员工类型',
-      dataIndex: 'YGLX',
-      width: 150,
-    },
-    {
       title: '现岗位',
       dataIndex: 'XGW',
       width: 150,
     },
     {
-      title: '现岗位上岗时间',
-      dataIndex: 'XGWSGSJ',
-      width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-    },
-    {
-      title: '现婚姻情况',
-      dataIndex: 'HYQK',
-      width: 150,
-    },
-    {
-      title: '现生育情况',
-      dataIndex: 'SYQK',
-      width: 150,
-    },
-    {
-      title: '状态',
-      dataIndex: 'ZT',
-      width: 150,
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
+      title: '积分总分',
+      dataIndex: 'JFZF',
+      width: 125,
     },
   ];
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'modifyhislist/fetch',
+      type: 'markhislist/fetch',
     });
   }
 
@@ -140,7 +107,7 @@ class ModifyHisList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     dispatch({
-      type: 'modifyhislist/fetch',
+      type: 'markhislist/fetch',
       payload: params,
     });
   };
@@ -152,7 +119,7 @@ class ModifyHisList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'modifyhislist/fetch',
+      type: 'markhislist/fetch',
       payload: {},
     });
   };
@@ -200,7 +167,7 @@ class ModifyHisList extends PureComponent {
       });
 
       dispatch({
-        type: 'modifyhislist/fetch',
+        type: 'markhislist/fetch',
         payload: params,
       });
     });
@@ -209,50 +176,28 @@ class ModifyHisList extends PureComponent {
   expandedRowRender = record => {
     const columns = [
       {
-        title: '机构名称',
-        dataIndex: 'JGMC',
+        title: '考试项目',
+        dataIndex: 'KSXM',
         width: 150,
       },
       {
-        title: '机构代码',
-        dataIndex: 'JGDM',
-        width: 150,
+        title: '得分',
+        dataIndex: 'DF',
+        width: 125,
       },
       {
-        title: '员工类型',
-        dataIndex: 'YGLX',
-        width: 150,
+        title: '积分',
+        dataIndex: 'JF',
+        width: 125,
       },
       {
-        title: '岗位',
-        dataIndex: 'GW',
-        width: 150,
-      },
-      {
-        title: '上岗时间',
-        dataIndex: 'SGSJ',
-        width: 150,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-      },
-      {
-        title: '离岗时间',
-        dataIndex: 'LGSJ',
-        width: 150,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-      },
-      {
-        title: '婚姻情况',
-        dataIndex: 'HYQK',
-        width: 150,
-      },
-      {
-        title: '生育情况',
-        dataIndex: 'SYQK',
+        title: '录入时间',
+        dataIndex: 'LRSJ',
         width: 150,
       },
     ];
 
-    return <Table dataSource={record.dataHis} columns={columns} pagination={false} />;
+    return <Table dataSource={record.dataDetail} columns={columns} pagination={false} />;
   };
 
   renderSimpleForm() {
@@ -349,7 +294,7 @@ class ModifyHisList extends PureComponent {
 
   render() {
     const {
-      modifyhislist: { data },
+      markhislist: { data },
       loading,
     } = this.props;
     const { selectedRows } = this.state;
@@ -369,7 +314,7 @@ class ModifyHisList extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 1450 }}
+              scroll={{ x: 800 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -386,4 +331,4 @@ class ModifyHisList extends PureComponent {
   }
 }
 
-export default ModifyHisList;
+export default MarkHisManage;

@@ -126,7 +126,7 @@ export async function queryNotices(params = {}) {
 export async function getFakeCaptcha(mobile) {
   return request(`/api/captcha?mobile=${mobile}`);
 }
-
+// 基本信息维护
 export async function queryInfoList(params) {
   return request(`/api/infolist?${stringify(params)}`);
 }
@@ -153,6 +153,46 @@ export async function addInfoList(params) {
 
 export async function updateInfoList(params) {
   return request('/api/infolist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'update',
+    },
+  });
+}
+
+// 基本信息变更历史纪录
+export async function queryModifyHisList(params) {
+  return request(`/api/modifyhislist?${stringify(params)}`);
+}
+
+// 积分管理
+export async function queryMarkHisList(params) {
+  return request(`/api/markhislist?${stringify(params)}`);
+}
+
+export async function removeMarkHisList(params) {
+  return request('/api/markhislist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
+export async function addMarkHisList(params) {
+  return request('/api/markhislist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'add',
+    },
+  });
+}
+
+export async function updateMarkhisList(params) {
+  return request('/api/markhislist', {
     method: 'POST',
     body: {
       ...params,

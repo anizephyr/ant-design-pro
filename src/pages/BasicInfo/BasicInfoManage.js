@@ -23,7 +23,7 @@ import {
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import styles from './InfoList.less';
+import styles from './BasicInfoManage.less';
 
 const FormItem = Form.Item;
 const { Step } = Steps;
@@ -279,13 +279,24 @@ class UpdateForm extends PureComponent {
       const { updateVals } = this.state;
       const formItems = [];
       const updateNames = Object.keys(updateVals);
+      const labels = {
+        JGMC: '机构名称',
+        JGDM: '机构代码',
+        LXDH: '联系电话',
+        YGLX: '员工类型',
+        XGW: '现岗位',
+        XGWSGSJ: '现岗位上岗时间',
+        HYQK: '婚姻情况',
+        SYQK: '生育情况',
+        JTZZ: '家庭住址',
+      };
       for (let i = 0; i < updateNames.length; i += 1) {
         formItems.push(
           <FormItem
             key={updateNames[i]}
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 15 }}
-            label={updateNames[i]}
+            label={labels[updateNames[i]]}
           >
             {form.getFieldDecorator(updateNames[i], { initialValue: updateVals[updateNames[i]] })(
               <Input />
@@ -327,28 +338,17 @@ class UpdateForm extends PureComponent {
           </Select>
         )}
       </FormItem>,
-      <FormItem key="XGW" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位">
+      <FormItem key="XGW" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="岗位">
         {form.getFieldDecorator('XGW', {
-          rules: [{ required: true, message: '现岗位不能为空！' }],
+          rules: [{ required: true, message: '岗位不能为空！' }],
           initialValue: formVals.XGW,
-        })(<Input placeholder="请输入现岗位" />)}
+        })(<Input placeholder="请输入岗位" />)}
       </FormItem>,
-      <FormItem
-        key="XGWSGSJ"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 15 }}
-        label="现岗位上岗时间"
-      >
+      <FormItem key="XGWSGSJ" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="上岗时间">
         {form.getFieldDecorator('XGWSGSJ', {
-          rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
+          rules: [{ required: true, message: '请选择上岗时间！' }],
           initialValue: formVals.XGWSGSJ,
-        })(
-          <DatePicker
-            style={{ width: '100%' }}
-            format="YYYY-MM-DD"
-            laceholder="选择现岗位上岗时间"
-          />
-        )}
+        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择上岗时间" />)}
       </FormItem>,
       <FormItem key="HYQK" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="婚姻情况">
         {form.getFieldDecorator('HYQK', {
@@ -432,7 +432,7 @@ class UpdateForm extends PureComponent {
   loading: loading.models.infolist,
 }))
 @Form.create()
-class InfoList extends PureComponent {
+class BasicInfoManage extends PureComponent {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -451,11 +451,11 @@ class InfoList extends PureComponent {
       width: 150,
     },
     {
-      title: '姓名',
+      title: '人员姓名',
       dataIndex: 'RYMC',
       sorter: true,
       fixed: 'left',
-      width: 100,
+      width: 125,
     },
     {
       title: '机构代码',
@@ -906,7 +906,7 @@ class InfoList extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 3025 }}
+              scroll={{ x: 3050 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -929,4 +929,4 @@ class InfoList extends PureComponent {
   }
 }
 
-export default InfoList;
+export default BasicInfoManage;

@@ -41,16 +41,16 @@ export default [
           },
         ],
       },
-      //基本信息管理
+      //人员基本信息:1.基本信息维护2.变更记录3.积分管理
       {
         path: '/basicinfo',
         name: 'basicinfo',
         icon: 'table',
         routes: [
           {
-            path: '/basicinfo/infolist',
-            name: 'infolist',
-            component: './BasicInfo/InfoList',
+            path: '/basicinfo/basicinfomanage',
+            name: 'basicinfomanage',
+            component: './BasicInfo/BasicInfoManage',
           },
           {
             path: '/basicinfo/modifyhis',
@@ -58,13 +58,42 @@ export default [
             component: './BasicInfo/ModifyHisList',
           },
           {
-            path: '/basicinfo/markhis',
-            name: 'markhis',
-            component: './BasicInfo/MarkHisList',
+            path: '/basicinfo/markhismanage',
+            name: 'markhismanage',
+            component: './BasicInfo/MarkHisManage',
+          },
+        ],
+      },
+      //考核信息:1.考核指标明细维护 2.岗位与考核指标关系维护 3.人员考核信息 4.机构考核信息
+      {
+        path: '/performanceinfo',
+        name: 'performanceinfo',
+        icon: 'check-circle-o',
+        routes: [
+          {
+            path: '/performanceinfo/indicatorsmanage',
+            name: 'indicatorsmanage',
+            component: './PerformanceInfo/IndicatorsManage',
+          },
+          {
+            path: '/performanceinfo/relationship',
+            name: 'relationship',
+            component: './PerformanceInfo/Relationship',
+          },
+          {
+            path: '/performanceinfo/staffperformance',
+            name: 'staffperformance',
+            component: './PerformanceInfo/StaffPerformance',
+          },
+          {
+            path: '/performanceinfo/orgperformance',
+            name: 'orgperformance',
+            component: './PerformanceInfo/OrgPerformance',
           },
         ],
       },
       // forms
+      /* 
       {
         path: '/form',
         icon: 'form',
@@ -278,6 +307,7 @@ export default [
           },
         ],
       },
+      */
       {
         component: '404',
       },
