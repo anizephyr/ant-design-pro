@@ -15,10 +15,10 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user'],
+    authority: ['creator', 'admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/basicinfo/basicinfomanage' },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -74,11 +74,13 @@ export default [
             path: '/performanceinfo/indicatorsmanage',
             name: 'indicatorsmanage',
             component: './PerformanceInfo/IndicatorsManage',
+            authority: ['creator', 'admin'],
           },
           {
             path: '/performanceinfo/relationship',
             name: 'relationship',
             component: './PerformanceInfo/Relationship',
+            authority: ['creator', 'admin'],
           },
           {
             path: '/performanceinfo/staffperformance',

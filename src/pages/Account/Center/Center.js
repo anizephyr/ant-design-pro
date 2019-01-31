@@ -4,6 +4,8 @@ import Link from 'umi/link';
 import router from 'umi/router';
 import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
+import { getToken, getAuthority } from '@/utils/authority';
+
 import styles from './Center.less';
 
 @connect(({ loading, user, project }) => ({
@@ -24,6 +26,10 @@ class Center extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: {
+        token: getToken(),
+        authority: getAuthority(),
+      },
     });
     dispatch({
       type: 'list/fetch',

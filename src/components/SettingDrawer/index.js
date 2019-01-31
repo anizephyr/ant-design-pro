@@ -158,12 +158,12 @@ class SettingDrawer extends PureComponent {
               list={[
                 {
                   key: 'dark',
-                  url: 'https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg',
+                  url: 'LCkqqYNmvBEbokSDscrm.svg',
                   title: formatMessage({ id: 'app.setting.pagestyle.dark' }),
                 },
                 {
                   key: 'light',
-                  url: 'https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg',
+                  url: 'jpRkZQMyYRryryPNtyIC.svg',
                   title: formatMessage({ id: 'app.setting.pagestyle.light' }),
                 },
               ]}
@@ -185,12 +185,12 @@ class SettingDrawer extends PureComponent {
               list={[
                 {
                   key: 'sidemenu',
-                  url: 'https://gw.alipayobjects.com/zos/rmsportal/JopDzEhOqwOjeNTXkoje.svg',
+                  url: 'JopDzEhOqwOjeNTXkoje.svg',
                   title: formatMessage({ id: 'app.setting.sidemenu' }),
                 },
                 {
                   key: 'topmenu',
-                  url: 'https://gw.alipayobjects.com/zos/rmsportal/KDNDBbriJhLwuqMoxcAr.svg',
+                  url: 'KDNDBbriJhLwuqMoxcAr.svg',
                   title: formatMessage({ id: 'app.setting.topmenu' }),
                 },
               ]}

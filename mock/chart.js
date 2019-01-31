@@ -192,5 +192,5 @@ const getFakeChartData = {
 };
 
 export default {
-  'GET /api/fake_chart_data': getFakeChartData,
+  'GET /server/api/fake_chart_data': getFakeChartData,
 };

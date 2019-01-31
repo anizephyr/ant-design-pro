@@ -9,15 +9,15 @@ export default {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
+    *fetch({ payload }, { call, put }) {
+      const response = yield call(queryUsers, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent({ payload }, { call, put }) {
+      const response = yield call(queryCurrent, payload);
       yield put({
         type: 'saveCurrentUser',
         payload: response,

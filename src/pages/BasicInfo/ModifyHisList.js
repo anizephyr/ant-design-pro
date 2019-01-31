@@ -12,7 +12,6 @@ import {
   Icon,
   Button,
   /* InputNumber, */
-  Badge,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -25,8 +24,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['deleted', 'normal'];
-const status = ['已删除', '正常'];
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ modifyhislist, loading }) => ({
@@ -92,24 +89,6 @@ class ModifyHisList extends PureComponent {
       title: '现生育情况',
       dataIndex: 'SYQK',
       width: 150,
-    },
-    {
-      title: '状态',
-      dataIndex: 'ZT',
-      width: 150,
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
     },
   ];
 
@@ -224,7 +203,7 @@ class ModifyHisList extends PureComponent {
         width: 150,
       },
       {
-        title: '岗位',
+        title: '原岗位',
         dataIndex: 'GW',
         width: 150,
       },
@@ -239,16 +218,6 @@ class ModifyHisList extends PureComponent {
         dataIndex: 'LGSJ',
         width: 150,
         render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-      },
-      {
-        title: '婚姻情况',
-        dataIndex: 'HYQK',
-        width: 150,
-      },
-      {
-        title: '生育情况',
-        dataIndex: 'SYQK',
-        width: 150,
       },
     ];
 

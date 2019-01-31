@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { Spin, Tag, Menu, Icon, Avatar /* Tooltip */ } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
-import HeaderSearch from '../HeaderSearch';
+/* import HeaderSearch from '../HeaderSearch'; */
 import HeaderDropdown from '../HeaderDropdown';
-import SelectLang from '../SelectLang';
+/* import SelectLang from '../SelectLang'; */
 import styles from './index.less';
 
 export default class GlobalHeaderRight extends PureComponent {
@@ -123,6 +123,7 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
+        {/*
         <HeaderSearch
           className={`${styles.action} ${styles.search}`}
           placeholder={formatMessage({ id: 'component.globalHeader.search' })}
@@ -148,6 +149,7 @@ export default class GlobalHeaderRight extends PureComponent {
             <Icon type="question-circle-o" />
           </a>
         </Tooltip>
+        */}
         <NoticeIcon
           className={styles.action}
           count={currentUser.unreadCount}
@@ -173,7 +175,7 @@ export default class GlobalHeaderRight extends PureComponent {
             title={formatMessage({ id: 'component.globalHeader.notification' })}
             name="notification"
             emptyText={formatMessage({ id: 'component.globalHeader.notification.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
+            emptyImage="wAhyIChODzsoKIOBHcBk.svg"
             {...loadMoreProps}
           />
           <NoticeIcon.Tab
@@ -182,7 +184,7 @@ export default class GlobalHeaderRight extends PureComponent {
             title={formatMessage({ id: 'component.globalHeader.message' })}
             name="message"
             emptyText={formatMessage({ id: 'component.globalHeader.message.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
+            emptyImage="sAuJeJzSKbUmHfBQRzmZ.svg"
             {...loadMoreProps}
           />
           <NoticeIcon.Tab
@@ -191,7 +193,7 @@ export default class GlobalHeaderRight extends PureComponent {
             title={formatMessage({ id: 'component.globalHeader.event' })}
             name="event"
             emptyText={formatMessage({ id: 'component.globalHeader.event.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
+            emptyImage="HsIsxMZiWKrNUavQUXqx.svg"
             {...loadMoreProps}
           />
         </NoticeIcon>
@@ -210,7 +212,7 @@ export default class GlobalHeaderRight extends PureComponent {
         ) : (
           <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
         )}
-        <SelectLang className={styles.action} />
+        {/* <SelectLang className={styles.action} /> */}
       </div>
     );
   }

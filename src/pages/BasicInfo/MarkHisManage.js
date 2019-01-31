@@ -7,9 +7,9 @@ import {
   Card,
   Form,
   Input,
-  Select,
   Icon,
   Button,
+  DatePicker,
   /* InputNumber, */
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
@@ -18,7 +18,6 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './MarkHisManage.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -69,8 +68,8 @@ class MarkHisManage extends PureComponent {
       width: 125,
     },
     {
-      title: '现岗位',
-      dataIndex: 'XGW',
+      title: '岗位',
+      dataIndex: 'GW',
       width: 150,
     },
     {
@@ -213,8 +212,15 @@ class MarkHisManage extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="人员姓名">
-              {getFieldDecorator('RYMC')(<Input placeholder="请输入人员姓名" />)}
+            <FormItem label="积分时段">
+              {getFieldDecorator('JFSD')(
+                <DatePicker
+                  style={{ width: '100%' }}
+                  mode="month"
+                  format="YYYY-MM"
+                  laceholder="选择积分时段"
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -248,25 +254,32 @@ class MarkHisManage extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="人员姓名">
-              {getFieldDecorator('RYMC')(<Input placeholder="请输入人员姓名" />)}
+            <FormItem label="积分时段">
+              {getFieldDecorator('JFSD')(
+                <DatePicker
+                  style={{ width: '100%' }}
+                  mode="month"
+                  format="YYYY-MM"
+                  laceholder="选择积分时段"
+                />
+              )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="人员代码">
-              {getFieldDecorator('RYDM')(<Input placeholder="请输入人员工号" />)}
+            <FormItem label="人员姓名">
+              {getFieldDecorator('RYMC')(<Input placeholder="请输入人员姓名" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="员工类型">
-              {getFieldDecorator('YGLX')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="正式">正式</Option>
-                  <Option value="派遣">派遣</Option>
-                </Select>
-              )}
+            <FormItem label="人员代码">
+              {getFieldDecorator('RYDM')(<Input placeholder="请输入人员工号" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="岗位">
+              {getFieldDecorator('GW')(<Input placeholder="请输入岗位" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

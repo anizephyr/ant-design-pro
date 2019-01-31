@@ -153,6 +153,6 @@ const getProfileAdvancedData = {
 };
 
 export default {
-  'GET /api/profile/advanced': getProfileAdvancedData,
-  'GET /api/profile/basic': getProfileBasicData,
+  'GET /server/api/profile/advanced': getProfileAdvancedData,
+  'GET /server/api/profile/basic': getProfileBasicData,
 };

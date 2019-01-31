@@ -33,7 +33,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['deleted', 'normal'];
+const statusMap = ['warning', 'default'];
 const status = ['已删除', '正常'];
 
 const CreateForm = Form.create()(props => {
@@ -643,10 +643,15 @@ class BasicInfoManage extends PureComponent {
           payload: {
             deleteData: selectedRows.map(row => row.RYDM),
           },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
+          callback: resp => {
+            if (resp.state) {
+              message.success('删除成功');
+              this.setState({
+                selectedRows: [],
+              });
+            } else {
+              message.error('删除失败');
+            }
           },
         });
         break;
@@ -656,10 +661,15 @@ class BasicInfoManage extends PureComponent {
           payload: {
             updateDatas: '',
           },
-          callback: () => {
-            this.setState({
-              selectedRows: [],
-            });
+          callback: resp => {
+            if (resp.state) {
+              message.success('更新成功');
+              this.setState({
+                selectedRows: [],
+              });
+            } else {
+              message.error('更新失败');
+            }
           },
         });
         break;
@@ -675,10 +685,15 @@ class BasicInfoManage extends PureComponent {
       payload: {
         deleteData: [record].map(row => row.RYDM),
       },
-      callback: () => {
-        this.setState({
-          selectedRows: [],
-        });
+      callback: resp => {
+        if (resp.state) {
+          message.success('删除成功');
+          this.setState({
+            selectedRows: [],
+          });
+        } else {
+          message.error('删除失败');
+        }
       },
     });
   };
@@ -753,10 +768,15 @@ class BasicInfoManage extends PureComponent {
           JTZZ: fields.JTZZ,
         },
       },
+      callback: resp => {
+        if (resp.state) {
+          message.success('添加成功');
+          this.handleModalVisible();
+        } else {
+          message.error('添加失败');
+        }
+      },
     });
-
-    message.success('添加成功');
-    this.handleModalVisible();
   };
 
   handleUpdate = fields => {
@@ -766,10 +786,15 @@ class BasicInfoManage extends PureComponent {
       payload: {
         updateData: fields,
       },
+      callback: resp => {
+        if (resp.state) {
+          message.success('配置成功');
+          this.handleUpdateModalVisible();
+        } else {
+          message.error('配置失败');
+        }
+      },
     });
-
-    message.success('配置成功');
-    this.handleUpdateModalVisible();
   };
 
   renderSimpleForm() {

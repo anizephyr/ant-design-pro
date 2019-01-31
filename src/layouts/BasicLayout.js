@@ -19,6 +19,7 @@ import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { title } from '../defaultSettings';
 import styles from './BasicLayout.less';
+import { getToken, getAuthority } from '@/utils/authority';
 
 // lazy load SettingDrawer
 const SettingDrawer = React.lazy(() => import('@/components/SettingDrawer'));
@@ -64,6 +65,10 @@ class BasicLayout extends React.PureComponent {
     } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: {
+        token: getToken(),
+        authority: getAuthority(),
+      },
     });
     dispatch({
       type: 'setting/getSetting',
@@ -98,18 +103,18 @@ class BasicLayout extends React.PureComponent {
 
   getRouterAuthority = (pathname, routeData) => {
     let routeAuthority = ['noAuthority'];
-    const getAuthority = (key, routes) => {
+    const getRouteAuthority = (key, routes) => {
       routes.map(route => {
         if (route.path && pathToRegexp(route.path).test(key)) {
           routeAuthority = route.authority;
         } else if (route.routes) {
-          routeAuthority = getAuthority(key, route.routes);
+          routeAuthority = getRouteAuthority(key, route.routes);
         }
         return route;
       });
       return routeAuthority;
     };
-    return getAuthority(pathname, routeData);
+    return getRouteAuthority(pathname, routeData);
   };
 
   getPageTitle = (pathname, breadcrumbNameMap) => {

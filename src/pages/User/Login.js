@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import md5 from 'md5';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 /* import Link from 'umi/link'; */
@@ -46,7 +47,8 @@ class LoginPage extends Component {
       dispatch({
         type: 'login/login',
         payload: {
-          ...values,
+          userName: values.userName,
+          password: md5(values.password),
           type,
         },
       });

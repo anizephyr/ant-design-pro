@@ -322,15 +322,15 @@ function getFakeCaptcha(req, res) {
 }
 
 export default {
-  'GET /api/project/notice': getNotice,
-  'GET /api/activities': getActivities,
-  'POST /api/forms': (req, res) => {
+  'GET /server/api/project/notice': getNotice,
+  'GET /server/api/activities': getActivities,
+  'POST /server/api/forms': (req, res) => {
     res.send({ message: 'Ok' });
   },
-  'GET /api/tags': mockjs.mock({
+  'GET /server/api/tags': mockjs.mock({
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
   }),
-  'GET /api/fake_list': getFakeList,
-  'POST /api/fake_list': postFakeList,
-  'GET /api/captcha': getFakeCaptcha,
+  'GET /server/api/fake_list': getFakeList,
+  'POST /server/api/fake_list': postFakeList,
+  'GET /server/api/captcha': getFakeCaptcha,
 };

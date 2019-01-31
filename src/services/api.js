@@ -2,19 +2,19 @@ import { stringify } from 'qs';
 import request from '@/utils/request';
 
 export async function queryProjectNotice() {
-  return request('/api/project/notice');
+  return request('/server/api/project/notice');
 }
 
 export async function queryActivities() {
-  return request('/api/activities');
+  return request('/server/api/activities');
 }
 
 export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
+  return request(`/server/api/rule?${stringify(params)}`);
 }
 
 export async function removeRule(params) {
-  return request('/api/rule', {
+  return request('/server/api/rule', {
     method: 'POST',
     body: {
       ...params,
@@ -24,7 +24,7 @@ export async function removeRule(params) {
 }
 
 export async function addRule(params) {
-  return request('/api/rule', {
+  return request('/server/api/rule', {
     method: 'POST',
     body: {
       ...params,
@@ -34,7 +34,7 @@ export async function addRule(params) {
 }
 
 export async function updateRule(params) {
-  return request('/api/rule', {
+  return request('/server/api/rule', {
     method: 'POST',
     body: {
       ...params,
@@ -44,35 +44,35 @@ export async function updateRule(params) {
 }
 
 export async function fakeSubmitForm(params) {
-  return request('/api/forms', {
+  return request('/server/api/forms', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function fakeChartData() {
-  return request('/api/fake_chart_data');
+  return request('/server/api/fake_chart_data');
 }
 
 export async function queryTags() {
-  return request('/api/tags');
+  return request('/server/api/tags');
 }
 
 export async function queryBasicProfile() {
-  return request('/api/profile/basic');
+  return request('/server/api/profile/basic');
 }
 
 export async function queryAdvancedProfile() {
-  return request('/api/profile/advanced');
+  return request('/server/api/profile/advanced');
 }
 
 export async function queryFakeList(params) {
-  return request(`/api/fake_list?${stringify(params)}`);
+  return request(`/server/api/fake_list?${stringify(params)}`);
 }
 
 export async function removeFakeList(params) {
   const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+  return request(`/server/api/fake_list?count=${count}`, {
     method: 'POST',
     body: {
       ...restParams,
@@ -83,7 +83,7 @@ export async function removeFakeList(params) {
 
 export async function addFakeList(params) {
   const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+  return request(`/server/api/fake_list?count=${count}`, {
     method: 'POST',
     body: {
       ...restParams,
@@ -94,7 +94,7 @@ export async function addFakeList(params) {
 
 export async function updateFakeList(params) {
   const { count = 5, ...restParams } = params;
-  return request(`/api/fake_list?count=${count}`, {
+  return request(`/server/api/fake_list?count=${count}`, {
     method: 'POST',
     body: {
       ...restParams,
@@ -103,36 +103,45 @@ export async function updateFakeList(params) {
   });
 }
 
-export async function accountLogin(params) {
-  // TODO
-  const requestURL = '/api/login/account';
-  return request(requestURL, {
-    method: 'POST',
-    body: params,
-  });
-}
-
 export async function fakeRegister(params) {
-  return request('/api/register', {
+  return request('/server/api/register', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function queryNotices(params = {}) {
-  return request(`/api/notices?${stringify(params)}`);
+  return request(`/server/api/notices?${stringify(params)}`);
 }
 
 export async function getFakeCaptcha(mobile) {
-  return request(`/api/captcha?mobile=${mobile}`);
+  return request(`/server/api/captcha?mobile=${mobile}`);
 }
+
+// 登陆
+export async function accountLogin(params) {
+  return request('/server/api/userHandler', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'login',
+    },
+  });
+}
+
 // 基本信息维护
 export async function queryInfoList(params) {
-  return request(`/api/infolist?${stringify(params)}`);
+  return request('/server/api/infolistHandler', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'select',
+    },
+  });
 }
 
 export async function removeInfoList(params) {
-  return request('/api/infolist', {
+  return request('/server/api/infolistHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -142,7 +151,7 @@ export async function removeInfoList(params) {
 }
 
 export async function addInfoList(params) {
-  return request('/api/infolist', {
+  return request('/server/api/infolistHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -152,7 +161,7 @@ export async function addInfoList(params) {
 }
 
 export async function updateInfoList(params) {
-  return request('/api/infolist', {
+  return request('/server/api/infolistHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -163,16 +172,28 @@ export async function updateInfoList(params) {
 
 // 基本信息变更历史纪录
 export async function queryModifyHisList(params) {
-  return request(`/api/modifyhislist?${stringify(params)}`);
+  return request('/server/api/modifyhislist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'select',
+    },
+  });
 }
 
 // 积分管理
 export async function queryMarkHisList(params) {
-  return request(`/api/markhislist?${stringify(params)}`);
+  return request('/server/api/markhislist', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'select',
+    },
+  });
 }
 
 export async function removeMarkHisList(params) {
-  return request('/api/markhislist', {
+  return request('/server/api/markhislist', {
     method: 'POST',
     body: {
       ...params,
@@ -182,7 +203,7 @@ export async function removeMarkHisList(params) {
 }
 
 export async function addMarkHisList(params) {
-  return request('/api/markhislist', {
+  return request('/server/api/markhislist', {
     method: 'POST',
     body: {
       ...params,
@@ -192,7 +213,7 @@ export async function addMarkHisList(params) {
 }
 
 export async function updateMarkhisList(params) {
-  return request('/api/markhislist', {
+  return request('/server/api/markhislist', {
     method: 'POST',
     body: {
       ...params,

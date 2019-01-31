@@ -8,6 +8,8 @@ import { Radar } from '@/components/Charts';
 import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import { getToken, getAuthority } from '@/utils/authority';
+
 import styles from './Workplace.less';
 
 const links = [
@@ -51,6 +53,10 @@ class Workplace extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'user/fetchCurrent',
+      payload: {
+        token: getToken(),
+        authority: getAuthority(),
+      },
     });
     dispatch({
       type: 'project/fetchNotice',

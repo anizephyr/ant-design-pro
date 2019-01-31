@@ -10,6 +10,6 @@ function getCity(req, res) {
 }
 
 export default {
-  'GET /api/geographic/province': getProvince,
-  'GET /api/geographic/city/:province': getCity,
+  'GET /server/api/geographic/province': getProvince,
+  'GET /server/api/geographic/city/:province': getCity,
 };
