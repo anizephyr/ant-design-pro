@@ -1,17 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Upload, Select, Button } from 'antd';
+import React, { Component /** Fragment */ } from 'react';
+import { /* formatMessage, */ FormattedMessage } from 'umi/locale';
+import { Form, Input, /** Upload, */ Select, Button, DatePicker, Row, Col } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
-import GeographicView from './GeographicView';
-import PhoneView from './PhoneView';
+// import GeographicView from './GeographicView';
+// import PhoneView from './PhoneView';
 // import { getTimeDistance } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+const { TextArea } = Input;
 // 头像组件 方便以后独立，增加裁剪之类的功能
-const AvatarView = ({ avatar }) => (
+/** const AvatarView = ({ avatar }) => (
   <Fragment>
     <div className={styles.avatar_title}>
       <FormattedMessage id="app.settings.basic.avatar" defaultMessage="Avatar" />
@@ -27,7 +27,7 @@ const AvatarView = ({ avatar }) => (
       </div>
     </Upload>
   </Fragment>
-);
+); 
 
 const validatorGeographic = (rule, value, callback) => {
   const { province, city } = value;
@@ -49,7 +49,7 @@ const validatorPhone = (rule, value, callback) => {
     callback('Please input your phone number!');
   }
   callback();
-};
+}; */
 
 @connect(({ user }) => ({
   currentUser: user.currentUser,
@@ -65,7 +65,9 @@ class BaseView extends Component {
     Object.keys(form.getFieldsValue()).forEach(key => {
       const obj = {};
       obj[key] = currentUser[key] || null;
-      form.setFieldsValue(obj);
+      console.log(obj);
+
+      // form.setFieldsValue(obj);
     });
   };
 
@@ -88,92 +90,210 @@ class BaseView extends Component {
     } = this.props;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
-        <div className={styles.left}>
+        <div>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="机构名称">
+                  {getFieldDecorator('JGMC', {
+                    rules: [
+                      { required: true, message: '机构名不能为空！' },
+                      { max: 20, message: '机构名称过长！' },
+                    ],
+                  })(<Input placeholder="请输入机构名称" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="机构代码">
+                  {getFieldDecorator('JGDM', {
+                    rules: [{ required: true, message: '机构代码不能为空！' }],
+                  })(<Input placeholder="请输入机构代码" />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="姓名">
+                  {getFieldDecorator('RYMC', {
+                    rules: [{ required: true, message: '姓名不能为空！' }],
+                  })(<Input placeholder="请输入姓名" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="十位工号">
+                  {getFieldDecorator('RYDM', {
+                    rules: [{ required: true, message: '十位工号错误！', len: 10 }],
+                  })(<Input placeholder="请输入十位工号" />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="性别">
+                  {getFieldDecorator('XB', {
+                    rules: [{ required: true, message: '请选择性别！' }],
+                  })(
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                      <Option value="男">男</Option>
+                      <Option value="女">女</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="身份证号">
+                  {getFieldDecorator('SFZH', {
+                    rules: [{ required: true, message: '身份证长度错误！', len: 18 }],
+                  })(<Input placeholder="请输入身份证号码" />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="联系电话">
+                  {getFieldDecorator('LXDH')(<Input placeholder="请输入联系电话" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="员工类型">
+                  {getFieldDecorator('YGLX', {
+                    rules: [{ required: true, message: '请选择员工类型' }],
+                  })(
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                      <Option value="正式">正式</Option>
+                      <Option value="派遣">派遣</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="金融工作从业时间">
+                  {getFieldDecorator('JRGZCYSJ', {
+                    rules: [{ required: true, message: '请选择从业时间！' }],
+                  })(
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format="YYYY-MM-DD"
+                      laceholder="选择从业时间"
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="运营岗位上岗时间">
+                  {getFieldDecorator('YYGWSGSJ', {
+                    rules: [{ required: true, message: '请选择运营岗位上岗时间！' }],
+                  })(
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format="YYYY-MM-DD"
+                      laceholder="选择运营岗位上岗时间"
+                    />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="入行时间">
+                  {getFieldDecorator('RHSJ', {
+                    rules: [{ required: true, message: '请选择入行时间！' }],
+                  })(
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format="YYYY-MM-DD"
+                      laceholder="选择入行时间"
+                    />
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="现岗位">
+                  {getFieldDecorator('XGW', {
+                    rules: [{ required: true, message: '现岗位不能为空！' }],
+                  })(<Input placeholder="请输入现岗位" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="现岗位上岗时间">
+                  {getFieldDecorator('XGWSGSJ', {
+                    rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
+                  })(
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format="YYYY-MM-DD"
+                      laceholder="选择现岗位上岗时间"
+                    />
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={8}>
+                <FormItem label="第一学历">
+                  {getFieldDecorator('DYXL', {
+                    rules: [{ required: true, message: '输入不能为空！' }],
+                  })(<Input placeholder="请输入第一学历" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="最高学历">
+                  {getFieldDecorator('ZGXL', {
+                    rules: [{ required: true, message: '输入不能为空！' }],
+                  })(<Input placeholder="请输入最高学历" />)}
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem label="是否全日制">
+                  {getFieldDecorator('SFQRZ', {
+                    rules: [{ required: true, message: '选项不能为空！' }],
+                  })(
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                      <Option value="是">是</Option>
+                      <Option value="否">否</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <FormItem label="婚姻情况">
+                  {getFieldDecorator('HYQK', {
+                    rules: [{ required: true, message: '选项不能为空！' }],
+                  })(
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                      <Option value="已婚">已婚</Option>
+                      <Option value="未婚">未婚</Option>
+                      <Option value="离异">离异</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label="生育情况">
+                  {getFieldDecorator('SYQK', {
+                    rules: [{ required: true, message: '项目不能为空！' }],
+                  })(<Input placeholder="请输入生育情况" />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <FormItem label="家庭住址">
+              {getFieldDecorator('JTZZ')(<TextArea row={2} placeholder="请输入家庭住址" />)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.profile-message' }, {}),
-                  },
-                ],
+            <FormItem label="分组">
+              {getFieldDecorator('JCLX', {
+                rules: [{ required: true, message: '选项不能为空！' }],
               })(
-                <Input.TextArea
-                  placeholder={formatMessage({ id: 'app.settings.basic.profile-placeholder' })}
-                  rows={4}
-                />
-              )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.country-message' }, {}),
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="运营人员">运营人员</Option>
+                  <Option value="非运营人员">非运营人员</Option>
                 </Select>
               )}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
-              {getFieldDecorator('geographic', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.geographic-message' }, {}),
-                  },
-                  {
-                    validator: validatorGeographic,
-                  },
-                ],
-              })(<GeographicView />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('address', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
-              {getFieldDecorator('phone', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.phone-message' }, {}),
-                  },
-                  { validator: validatorPhone },
-                ],
-              })(<PhoneView />)}
-            </FormItem>
-            <Button type="primary">
+            <Button type="primary" htmlType="submit">
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
@@ -181,9 +301,9 @@ class BaseView extends Component {
             </Button>
           </Form>
         </div>
-        <div className={styles.right}>
+        {/** <div className={styles.right}>
           <AvatarView avatar={this.getAvatarURL()} />
-        </div>
+        </div> */}
       </div>
     );
   }

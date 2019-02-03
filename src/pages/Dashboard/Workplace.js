@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Row, Col, Card, List, Avatar } from 'antd';
+import { Row, Col, Card, List, Avatar, message } from 'antd';
 
 import { Radar } from '@/components/Charts';
 import EditableLinkGroup from '@/components/EditableLinkGroup';
@@ -56,6 +56,11 @@ class Workplace extends PureComponent {
       payload: {
         token: getToken(),
         authority: getAuthority(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
       },
     });
     dispatch({

@@ -13,9 +13,8 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    *login({ payload, callback }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      console.log(response);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -40,6 +39,7 @@ export default {
         }
         yield put(routerRedux.replace(redirect || '/'));
       }
+      if (callback) callback(response);
     },
 
     *getCaptcha({ payload }, { call }) {

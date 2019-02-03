@@ -1,56 +1,61 @@
+function postUserHandler(req, res) {
+  // const { method } = req.body;
+  // if (method === "currentUser") {
+  //   const currentUser = { "JGDM": "3100", "SFZH": "430111198411011312", "SYQK": "1", "JCLX": "非运营人员", "ZGXL": "本科", "JTZZ": "滨江路189号民生大厦", "XGW": "科技开发岗", "DYXL": "本科", "HYQK": "已婚", "XB": "男", "RHSJ": "2008-12-01", "XGWSGSJ": "2008-12-01", "JGMC": "长沙分行", "LXDH": "18674880545", "YGLX": "正式", "SFQRZ": "是", "RYDM": "0000035332", "YYGWSGSJ": "2008-12-01", "JRGZCYSJ": "2008-12-01", "ZT": "1", "RYMC": "徐立人", "status": true };
+  //   return res.json(currentUser);
+
+  // }
+  const currentUser = {
+    JGDM: '3100',
+    SFZH: '430111198411011312',
+    SYQK: '1',
+    JCLX: '非运营人员',
+    ZGXL: '本科',
+    JTZZ: '滨江路189号民生大厦',
+    XGW: '科技开发岗',
+    DYXL: '本科',
+    HYQK: '已婚',
+    XB: '男',
+    RHSJ: '2008-12-01',
+    XGWSGSJ: '2008-12-01',
+    JGMC: '长沙分行',
+    LXDH: '18674880545',
+    YGLX: '正式',
+    SFQRZ: '是',
+    RYDM: '0000035332',
+    YYGWSGSJ: '2008-12-01',
+    JRGZCYSJ: '2008-12-01',
+    ZT: '1',
+    RYMC: '徐立人',
+    status: true,
+  };
+  return res.json(currentUser);
+  // if (method === "login") {
+  //   const { password, userName, type } = req.body;
+  //   if (password === '1qaz2wsx' && userName === 'admin') {
+  //     res.send({
+  //       status: true,
+  //       type,
+  //       currentAuthority: 'admin',
+  //     });
+  //   }
+  //   if (password === '1qaz2wsx' && userName === 'user') {
+  //     res.send({
+  //       status: true,
+  //       type,
+  //       currentAuthority: 'user',
+  //     });
+  //   }
+  //   res.send({
+  //     status: false,
+  //     type,
+  //     currentAuthority: 'guest',
+  //   });
+
+  // }
+}
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 export default {
-  // 支持值为 Object 和 Array
-  'GET /server/api/currentUser': {
-    name: 'Serati Ma',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-    userid: '00000001',
-    email: 'antdesign@alipay.com',
-    signature: '海纳百川，有容乃大',
-    title: '交互专家',
-    group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-    tags: [
-      {
-        key: '0',
-        label: '很有想法的',
-      },
-      {
-        key: '1',
-        label: '专注设计',
-      },
-      {
-        key: '2',
-        label: '辣~',
-      },
-      {
-        key: '3',
-        label: '大长腿',
-      },
-      {
-        key: '4',
-        label: '川妹子',
-      },
-      {
-        key: '5',
-        label: '海纳百川',
-      },
-    ],
-    notifyCount: 12,
-    unreadCount: 11,
-    country: 'China',
-    geographic: {
-      province: {
-        label: '浙江省',
-        key: '330000',
-      },
-      city: {
-        label: '杭州市',
-        key: '330100',
-      },
-    },
-    address: '西湖区工专路 77 号',
-    phone: '0752-268888888',
-  },
   // GET POST 可省略
   'GET /server/api/users': [
     {
@@ -72,30 +77,8 @@ export default {
       address: 'Sidney No. 1 Lake Park',
     },
   ],
-  'POST /server/api/userHandler/login': (req, res) => {
-    const { password, userName, type } = req.body;
-    if (password === '1qaz2wsx' && userName === 'admin') {
-      res.send({
-        status: true,
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
-    if (password === '1qaz2wsx' && userName === 'user') {
-      res.send({
-        status: true,
-        type,
-        currentAuthority: 'user',
-      });
-      return;
-    }
-    res.send({
-      status: false,
-      type,
-      currentAuthority: 'guest',
-    });
-  },
+
+  'POST /server/api/userHandler': postUserHandler,
   'POST /server/api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },

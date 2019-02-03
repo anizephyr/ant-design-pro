@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input } from 'antd';
+import { Card, Row, Col, Icon, Avatar, Tag, Divider, Spin, Input, message } from 'antd';
 import GridContent from '@/components/PageHeaderWrapper/GridContent';
 import { getToken, getAuthority } from '@/utils/authority';
 
@@ -29,6 +29,11 @@ class Center extends PureComponent {
       payload: {
         token: getToken(),
         authority: getAuthority(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
       },
     });
     dispatch({

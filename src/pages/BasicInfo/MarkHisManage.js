@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import { getToken } from '@/utils/authority';
 import styles from './MarkHisManage.less';
 
 const FormItem = Form.Item;
@@ -83,6 +83,9 @@ class MarkHisManage extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'markhislist/fetch',
+      payload: {
+        token: getToken(),
+      },
     });
   }
 
@@ -107,7 +110,10 @@ class MarkHisManage extends PureComponent {
     }
     dispatch({
       type: 'markhislist/fetch',
-      payload: params,
+      payload: {
+        ...params,
+        token: getToken(),
+      },
     });
   };
 
@@ -119,7 +125,9 @@ class MarkHisManage extends PureComponent {
     });
     dispatch({
       type: 'markhislist/fetch',
-      payload: {},
+      payload: {
+        token: getToken(),
+      },
     });
   };
 
@@ -167,7 +175,10 @@ class MarkHisManage extends PureComponent {
 
       dispatch({
         type: 'markhislist/fetch',
-        payload: params,
+        payload: {
+          ...params,
+          token: getToken(),
+        },
       });
     });
   };

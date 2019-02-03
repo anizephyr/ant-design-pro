@@ -172,7 +172,7 @@ export async function updateInfoList(params) {
 
 // 基本信息变更历史纪录
 export async function queryModifyHisList(params) {
-  return request('/server/api/modifyhislist', {
+  return request('/server/api/modifyhisHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -183,7 +183,7 @@ export async function queryModifyHisList(params) {
 
 // 积分管理
 export async function queryMarkHisList(params) {
-  return request('/server/api/markhislist', {
+  return request('/server/api/markhisHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -193,7 +193,7 @@ export async function queryMarkHisList(params) {
 }
 
 export async function removeMarkHisList(params) {
-  return request('/server/api/markhislist', {
+  return request('/server/api/markhisHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -203,7 +203,7 @@ export async function removeMarkHisList(params) {
 }
 
 export async function addMarkHisList(params) {
-  return request('/server/api/markhislist', {
+  return request('/server/api/markhisHandler', {
     method: 'POST',
     body: {
       ...params,
@@ -213,7 +213,7 @@ export async function addMarkHisList(params) {
 }
 
 export async function updateMarkhisList(params) {
-  return request('/server/api/markhislist', {
+  return request('/server/api/markhisHandler', {
     method: 'POST',
     body: {
       ...params,

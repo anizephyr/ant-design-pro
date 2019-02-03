@@ -22,7 +22,7 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import { getToken } from '@/utils/authority';
 import styles from './BasicInfoManage.less';
 
 const FormItem = Form.Item;
@@ -33,7 +33,7 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['warning', 'default'];
+const statusMap = ['error', 'success'];
 const status = ['已删除', '正常'];
 
 const CreateForm = Form.create()(props => {
@@ -45,6 +45,8 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+  const { getFieldDecorator } = form;
+
   return (
     <Modal
       width={700}
@@ -54,133 +56,203 @@ const CreateForm = Form.create()(props => {
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构名称">
-        {form.getFieldDecorator('JGMC', {
-          rules: [
-            { required: true, message: '机构名不能为空！' },
-            { max: 20, message: '机构名称过长！' },
-          ],
-        })(<Input placeholder="请输入机构名称" />)}
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="机构名称">
+            {getFieldDecorator('JGMC', {
+              rules: [
+                { required: true, message: '机构名不能为空！' },
+                { max: 20, message: '机构名称过长！' },
+              ],
+            })(<Input placeholder="请输入机构名称" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="机构代码">
+            {getFieldDecorator('JGDM', {
+              rules: [{ required: true, message: '机构代码不能为空！' }],
+            })(<Input placeholder="请输入机构代码" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="姓名">
+            {getFieldDecorator('RYMC', {
+              rules: [{ required: true, message: '姓名不能为空！' }],
+            })(<Input placeholder="请输入姓名" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="十位工号">
+            {getFieldDecorator('RYDM', {
+              rules: [{ required: true, message: '十位工号错误！', len: 10 }],
+            })(<Input placeholder="请输入十位工号" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="性别">
+            {getFieldDecorator('XB', {
+              rules: [{ required: true, message: '请选择性别！' }],
+            })(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="男">男</Option>
+                <Option value="女">女</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="身份证号">
+            {getFieldDecorator('SFZH', {
+              rules: [{ required: true, message: '身份证长度错误！', len: 18 }],
+            })(<Input placeholder="请输入身份证号码" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="联系电话">
+            {getFieldDecorator('LXDH')(<Input placeholder="请输入联系电话" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="员工类型">
+            {getFieldDecorator('YGLX', {
+              rules: [{ required: true, message: '请选择员工类型' }],
+            })(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="正式">正式</Option>
+                <Option value="派遣">派遣</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="金融工作从业时间">
+            {getFieldDecorator('JRGZCYSJ', {
+              rules: [{ required: true, message: '请选择从业时间！' }],
+            })(
+              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择从业时间" />
+            )}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="运营岗位上岗时间">
+            {getFieldDecorator('YYGWSGSJ', {
+              rules: [{ required: true, message: '请选择运营岗位上岗时间！' }],
+            })(
+              <DatePicker
+                style={{ width: '100%' }}
+                format="YYYY-MM-DD"
+                laceholder="选择运营岗位上岗时间"
+              />
+            )}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="入行时间">
+            {getFieldDecorator('RHSJ', {
+              rules: [{ required: true, message: '请选择入行时间！' }],
+            })(
+              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择入行时间" />
+            )}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="现岗位">
+            {getFieldDecorator('XGW', {
+              rules: [{ required: true, message: '现岗位不能为空！' }],
+            })(<Input placeholder="请输入现岗位" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="现岗位上岗时间">
+            {getFieldDecorator('XGWSGSJ', {
+              rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
+            })(
+              <DatePicker
+                style={{ width: '100%' }}
+                format="YYYY-MM-DD"
+                laceholder="选择现岗位上岗时间"
+              />
+            )}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="第一学历">
+            {getFieldDecorator('DYXL', {
+              rules: [{ required: true, message: '输入不能为空！' }],
+            })(<Input placeholder="请输入第一学历" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="最高学历">
+            {getFieldDecorator('ZGXL', {
+              rules: [{ required: true, message: '输入不能为空！' }],
+            })(<Input placeholder="请输入最高学历" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="是否全日制">
+            {getFieldDecorator('SFQRZ', {
+              rules: [{ required: true, message: '选项不能为空！' }],
+            })(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="是">是</Option>
+                <Option value="否">否</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <FormItem label="婚姻情况">
+            {getFieldDecorator('HYQK', {
+              rules: [{ required: true, message: '选项不能为空！' }],
+            })(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="已婚">已婚</Option>
+                <Option value="未婚">未婚</Option>
+                <Option value="离异">离异</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+        <Col span={12}>
+          <FormItem label="生育情况">
+            {getFieldDecorator('SYQK', {
+              rules: [{ required: true, message: '项目不能为空！' }],
+            })(<Input placeholder="请输入生育情况" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <FormItem label="家庭住址">
+        {getFieldDecorator('JTZZ')(<TextArea row={2} placeholder="请输入家庭住址" />)}
       </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="机构代码">
-        {form.getFieldDecorator('JGDM', {
-          rules: [{ required: true, message: '机构代码不能为空！' }],
-        })(<Input placeholder="请输入机构代码" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="姓名">
-        {form.getFieldDecorator('RYMC', {
-          rules: [{ required: true, message: '姓名不能为空！' }],
-        })(<Input placeholder="请输入姓名" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="十位工号">
-        {form.getFieldDecorator('RYDM', {
-          rules: [{ required: true, message: '十位工号错误！', len: 10 }],
-        })(<Input placeholder="请输入十位工号" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="性别">
-        {form.getFieldDecorator('XB', {
-          rules: [{ required: true, message: '请选择性别！' }],
-        })(
-          <Select placeholder="请选择" style={{ width: '100%' }}>
-            <Option value="男">男</Option>
-            <Option value="女">女</Option>
-          </Select>
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="身份证号">
-        {form.getFieldDecorator('SFZH', {
-          rules: [{ required: true, message: '身份证长度错误！', len: 18 }],
-        })(<Input placeholder="请输入身份证号码" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="联系电话">
-        {form.getFieldDecorator('LXDH')(<Input placeholder="请输入联系电话" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="员工类型">
-        {form.getFieldDecorator('YGLX', {
-          rules: [{ required: true, message: '请选择员工类型' }],
-        })(
-          <Select placeholder="请选择" style={{ width: '100%' }}>
-            <Option value="正式">正式</Option>
-            <Option value="派遣">派遣</Option>
-          </Select>
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="金融工作从业时间">
-        {form.getFieldDecorator('JRGZCYSJ', {
-          rules: [{ required: true, message: '请选择从业时间！' }],
-        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择从业时间" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="本行运营岗位上岗时间">
-        {form.getFieldDecorator('BHYYGWSGSJ', {
-          rules: [{ required: true, message: '请选择运营岗位上岗时间！' }],
-        })(
-          <DatePicker
-            style={{ width: '100%' }}
-            format="YYYY-MM-DD"
-            laceholder="选择运营岗位上岗时间"
-          />
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="入行时间">
-        {form.getFieldDecorator('RHSJ', {
-          rules: [{ required: true, message: '请选择入行时间！' }],
-        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择入行时间" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位">
-        {form.getFieldDecorator('XGW', {
-          rules: [{ required: true, message: '现岗位不能为空！' }],
-        })(<Input placeholder="请输入现岗位" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="现岗位上岗时间">
-        {form.getFieldDecorator('XGWSGSJ', {
-          rules: [{ required: true, message: '请选择现岗位上岗时间！' }],
-        })(
-          <DatePicker
-            style={{ width: '100%' }}
-            format="YYYY-MM-DD"
-            laceholder="选择现岗位上岗时间"
-          />
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="第一学历">
-        {form.getFieldDecorator('DYXL', {
-          rules: [{ required: true, message: '输入不能为空！' }],
-        })(<Input placeholder="请输入第一学历" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="最高学历">
-        {form.getFieldDecorator('ZGXL', {
-          rules: [{ required: true, message: '输入不能为空！' }],
-        })(<Input placeholder="请输入最高学历" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="是否全日制">
-        {form.getFieldDecorator('SFQRZ', {
-          rules: [{ required: true, message: '选项不能为空！' }],
-        })(
-          <Select placeholder="请选择" style={{ width: '100%' }}>
-            <Option value="是">是</Option>
-            <Option value="否">否</Option>
-          </Select>
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="婚姻情况">
-        {form.getFieldDecorator('HYQK', {
-          rules: [{ required: true, message: '选项不能为空！' }],
-        })(
-          <Select placeholder="请选择" style={{ width: '100%' }}>
-            <Option value="已婚">已婚</Option>
-            <Option value="未婚">未婚</Option>
-            <Option value="离异">离异</Option>
-          </Select>
-        )}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="生育情况">
-        {form.getFieldDecorator('SYQK', {
-          rules: [{ required: true, message: '项目不能为空！' }],
-        })(<Input placeholder="请输入生育情况" />)}
-      </FormItem>
-      <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="家庭住址">
-        {form.getFieldDecorator('JTZZ')(<TextArea row={2} placeholder="请输入家庭住址" />)}
-      </FormItem>
+      <Row gutter={16}>
+        <Col span={12}>
+          <FormItem label="人员分类">
+            {getFieldDecorator('JCLX', {
+              rules: [{ required: true, message: '选项不能为空！' }],
+            })(
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="运营人员">运营人员</Option>
+                <Option value="非运营人员">非运营人员</Option>
+              </Select>
+            )}
+          </FormItem>
+        </Col>
+      </Row>
     </Modal>
   );
 });
@@ -209,6 +281,7 @@ class UpdateForm extends PureComponent {
         HYQK: props.values.HYQK,
         SYQK: props.values.SYQK,
         JTZZ: props.values.JTZZ,
+        JCLX: props.values.JCLX,
       },
       updateVals: {},
       currentStep: 0,
@@ -289,6 +362,7 @@ class UpdateForm extends PureComponent {
         HYQK: '婚姻情况',
         SYQK: '生育情况',
         JTZZ: '家庭住址',
+        JCLX: '人员分组',
       };
       for (let i = 0; i < updateNames.length; i += 1) {
         formItems.push(
@@ -371,6 +445,17 @@ class UpdateForm extends PureComponent {
       <FormItem key="JTZZ" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="家庭住址">
         {form.getFieldDecorator('JTZZ', { initialValue: formVals.JTZZ })(
           <TextArea row={2} placeholder="请输入家庭住址" />
+        )}
+      </FormItem>,
+      <FormItem key="JCLX" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="人员分组">
+        {form.getFieldDecorator('JCLX', {
+          rules: [{ required: true, message: '选项不能为空' }],
+          initialValue: formVals.JCLX,
+        })(
+          <Select placeholder="请选择" style={{ width: '100%' }}>
+            <Option value="运营人员">运营人员</Option>
+            <Option value="非运营人员">非运营人员</Option>
+          </Select>
         )}
       </FormItem>,
     ];
@@ -465,6 +550,7 @@ class BasicInfoManage extends PureComponent {
     },
     {
       title: '人员代码',
+      key: 'RYDM',
       dataIndex: 'RYDM',
       sorter: true,
       width: 125,
@@ -498,7 +584,7 @@ class BasicInfoManage extends PureComponent {
     },
     {
       title: '本行运营岗位上岗时间',
-      dataIndex: 'BHYYGWSGSJ',
+      dataIndex: 'YYGWSGSJ',
       width: 150,
       render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
     },
@@ -550,6 +636,11 @@ class BasicInfoManage extends PureComponent {
       width: 150,
     },
     {
+      title: '人员分组',
+      dataIndex: 'JCLX',
+      width: 120,
+    },
+    {
       title: '状态',
       dataIndex: 'ZT',
       width: 150,
@@ -573,7 +664,7 @@ class BasicInfoManage extends PureComponent {
       fixed: 'right',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>编辑</a>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>变更</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleSingleDelete(record)}>删除</a>
         </Fragment>
@@ -585,6 +676,14 @@ class BasicInfoManage extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'infolist/fetch',
+      payload: {
+        token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
+      },
     });
   }
 
@@ -609,7 +708,15 @@ class BasicInfoManage extends PureComponent {
     }
     dispatch({
       type: 'infolist/fetch',
-      payload: params,
+      payload: {
+        ...params,
+        token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
+      },
     });
   };
 
@@ -621,7 +728,14 @@ class BasicInfoManage extends PureComponent {
     });
     dispatch({
       type: 'infolist/fetch',
-      payload: {},
+      payload: {
+        token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
+      },
     });
   };
 
@@ -641,16 +755,17 @@ class BasicInfoManage extends PureComponent {
         dispatch({
           type: 'infolist/remove',
           payload: {
-            deleteData: selectedRows.map(row => row.RYDM),
+            deleteData: selectedRows.map(row => `"${row.RYDM}"`),
+            token: getToken(),
           },
           callback: resp => {
-            if (resp.state) {
-              message.success('删除成功');
+            if (resp.status) {
+              message.success(resp.msg);
               this.setState({
                 selectedRows: [],
               });
             } else {
-              message.error('删除失败');
+              message.error(resp.msg);
             }
           },
         });
@@ -660,15 +775,16 @@ class BasicInfoManage extends PureComponent {
           type: 'infolist/update',
           payload: {
             updateDatas: '',
+            token: getToken(),
           },
           callback: resp => {
-            if (resp.state) {
-              message.success('更新成功');
+            if (resp.status) {
+              message.success(resp.msg);
               this.setState({
                 selectedRows: [],
               });
             } else {
-              message.error('更新失败');
+              message.error(resp.msg);
             }
           },
         });
@@ -683,16 +799,17 @@ class BasicInfoManage extends PureComponent {
     dispatch({
       type: 'infolist/remove',
       payload: {
-        deleteData: [record].map(row => row.RYDM),
+        deleteData: [record].map(row => `"${row.RYDM}"`),
+        token: getToken(),
       },
       callback: resp => {
-        if (resp.state) {
-          message.success('删除成功');
+        if (resp.status) {
+          message.success(resp.msg);
           this.setState({
             selectedRows: [],
           });
         } else {
-          message.error('删除失败');
+          message.error(resp.msg);
         }
       },
     });
@@ -723,7 +840,15 @@ class BasicInfoManage extends PureComponent {
 
       dispatch({
         type: 'infolist/fetch',
-        payload: params,
+        payload: {
+          ...params,
+          token: getToken(),
+        },
+        callback: resp => {
+          if (!resp.status) {
+            message.error(resp.msg);
+          }
+        },
       });
     });
   };
@@ -746,6 +871,7 @@ class BasicInfoManage extends PureComponent {
     dispatch({
       type: 'infolist/add',
       payload: {
+        token: getToken(),
         addData: {
           JGMC: fields.JGMC,
           RYMC: fields.RYMC,
@@ -756,7 +882,7 @@ class BasicInfoManage extends PureComponent {
           LXDH: fields.LXDH,
           YGLX: fields.YGLX,
           JRGZCYSJ: moment(fields.JRGZCYSJ).format('YYYY-MM-DD'),
-          BHYYGWSGSJ: moment(fields.BHYYGWSGSJ).format('YYYY-MM-DD'),
+          YYGWSGSJ: moment(fields.YYGWSGSJ).format('YYYY-MM-DD'),
           RHSJ: moment(fields.RHSJ).format('YYYY-MM-DD'),
           XGW: fields.XGW,
           XGWSGSJ: moment(fields.XGWSGSJ).format('YYYY-MM-DD'),
@@ -766,14 +892,15 @@ class BasicInfoManage extends PureComponent {
           HYQK: fields.HYQK,
           SYQK: fields.SYQK,
           JTZZ: fields.JTZZ,
+          JCLX: fields.JCLX,
         },
       },
       callback: resp => {
-        if (resp.state) {
-          message.success('添加成功');
+        if (resp.status) {
+          message.success(resp.msg);
           this.handleModalVisible();
         } else {
-          message.error('添加失败');
+          message.error(resp.msg);
         }
       },
     });
@@ -785,13 +912,14 @@ class BasicInfoManage extends PureComponent {
       type: 'infolist/update',
       payload: {
         updateData: fields,
+        token: getToken(),
       },
       callback: resp => {
-        if (resp.state) {
-          message.success('配置成功');
+        if (resp.status) {
+          message.success(resp.msg);
           this.handleUpdateModalVisible();
         } else {
-          message.error('配置失败');
+          message.error(resp.msg);
         }
       },
     });
@@ -931,13 +1059,14 @@ class BasicInfoManage extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 3050 }}
+              scroll={{ x: 3170 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              rowKey="RYDM"
             />
           </div>
         </Card>

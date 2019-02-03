@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import DocumentTitle from 'react-document-title';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -68,6 +68,11 @@ class BasicLayout extends React.PureComponent {
       payload: {
         token: getToken(),
         authority: getAuthority(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
       },
     });
     dispatch({

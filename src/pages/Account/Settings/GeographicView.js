@@ -19,23 +19,23 @@ const nullSlectItem = {
   };
 })
 class GeographicView extends PureComponent {
-  componentDidMount = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'geographic/fetchProvince',
-    });
-  };
+  // componentDidMount = () => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'geographic/fetchProvince',
+  //   });
+  // };
 
-  componentDidUpdate(props) {
-    const { dispatch, value } = this.props;
+  // componentDidUpdate(props) {
+  //   const { dispatch, value } = this.props;
 
-    if (!props.value && !!value && !!value.province) {
-      dispatch({
-        type: 'geographic/fetchCity',
-        payload: value.province.key,
-      });
-    }
-  }
+  //   if (!props.value && !!value && !!value.province) {
+  //     dispatch({
+  //       type: 'geographic/fetchCity',
+  //       payload: value.province.key,
+  //     });
+  //   }
+  // }
 
   getProvinceOption() {
     const { province } = this.props;

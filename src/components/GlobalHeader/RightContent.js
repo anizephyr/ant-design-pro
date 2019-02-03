@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { FormattedMessage, formatMessage } from 'umi/locale';
+import { FormattedMessage /* formatMessage */ } from 'umi/locale';
 import { Spin, Tag, Menu, Icon, Avatar /* Tooltip */ } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
-import NoticeIcon from '../NoticeIcon';
+/* import NoticeIcon from '../NoticeIcon'; */
 /* import HeaderSearch from '../HeaderSearch'; */
 import HeaderDropdown from '../HeaderDropdown';
 /* import SelectLang from '../SelectLang'; */
@@ -80,29 +80,30 @@ export default class GlobalHeaderRight extends PureComponent {
   render() {
     const {
       currentUser,
-      fetchingMoreNotices,
+      onMenuClick,
+      /** fetchingMoreNotices,
       fetchingNotices,
       loadedAllNotices,
       onNoticeVisibleChange,
-      onMenuClick,
       onNoticeClear,
       skeletonCount,
+       */
       theme,
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
+        {/** <Menu.Item key="userCenter">
           <Icon type="user" />
           <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="userinfo">
           <Icon type="setting" />
           <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
         </Menu.Item>
-        <Menu.Item key="triggerError">
+        {/* <Menu.Item key="triggerError">
           <Icon type="close-circle" />
           <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
@@ -110,13 +111,14 @@ export default class GlobalHeaderRight extends PureComponent {
         </Menu.Item>
       </Menu>
     );
-    const loadMoreProps = {
+    /* const loadMoreProps = {
       skeletonCount,
       loadedAll: loadedAllNotices,
       loading: fetchingMoreNotices,
     };
     const noticeData = this.getNoticeData();
     const unreadMsg = this.getUnreadData(noticeData);
+     */
     let className = styles.right;
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
@@ -149,7 +151,6 @@ export default class GlobalHeaderRight extends PureComponent {
             <Icon type="question-circle-o" />
           </a>
         </Tooltip>
-        */}
         <NoticeIcon
           className={styles.action}
           count={currentUser.unreadCount}
@@ -196,17 +197,17 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="HsIsxMZiWKrNUavQUXqx.svg"
             {...loadMoreProps}
           />
-        </NoticeIcon>
-        {currentUser.name ? (
+        </NoticeIcon> */}
+        {currentUser.RYMC ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src="./BiazfanxmamNRoxxVxka.png"
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{currentUser.RYMC}</span>
             </span>
           </HeaderDropdown>
         ) : (

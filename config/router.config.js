@@ -251,13 +251,13 @@ export default [
             component: './Exception/TriggerException',
           },
         ],
-      },
+      }, */
       {
         name: 'account',
         icon: 'user',
         path: '/account',
         routes: [
-          {
+          /* {
             path: '/account/center',
             name: 'center',
             component: './Account/Center/Center',
@@ -279,7 +279,7 @@ export default [
                 component: './Account/Center/Projects',
               },
             ],
-          },
+          }, */
           {
             path: '/account/settings',
             name: 'settings',
@@ -297,19 +297,18 @@ export default [
                 path: '/account/settings/security',
                 component: './Account/Settings/SecurityView',
               },
-              {
+              /** {
                 path: '/account/settings/binding',
                 component: './Account/Settings/BindingView',
               },
               {
                 path: '/account/settings/notification',
                 component: './Account/Settings/NotificationView',
-              },
+              }, */
             ],
           },
         ],
       },
-      */
       {
         component: '404',
       },

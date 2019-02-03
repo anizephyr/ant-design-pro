@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { getToken } from '@/utils/authority';
 
 import styles from './ModifyHisList.less';
 
@@ -96,6 +97,9 @@ class ModifyHisList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'modifyhislist/fetch',
+      payload: {
+        token: getToken(),
+      },
     });
   }
 
@@ -120,7 +124,10 @@ class ModifyHisList extends PureComponent {
     }
     dispatch({
       type: 'modifyhislist/fetch',
-      payload: params,
+      payload: {
+        ...params,
+        token: getToken(),
+      },
     });
   };
 
@@ -132,7 +139,9 @@ class ModifyHisList extends PureComponent {
     });
     dispatch({
       type: 'modifyhislist/fetch',
-      payload: {},
+      payload: {
+        token: getToken(),
+      },
     });
   };
 
@@ -180,7 +189,10 @@ class ModifyHisList extends PureComponent {
 
       dispatch({
         type: 'modifyhislist/fetch',
-        payload: params,
+        payload: {
+          ...params,
+          token: getToken(),
+        },
       });
     });
   };

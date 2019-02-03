@@ -70,13 +70,13 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  proxy: {
-    '/server/api/': {
-      target: 'http://127.0.0.1:8080/DAP/',
-      changeOrigin: true,
-      pathRewrite: { '/server/api/': 'yyrygl/' },
-    },
-  },
+  // proxy: {
+  //   '/server/api/': {
+  //     target: 'http://127.0.0.1:8080/DAP/',
+  //     changeOrigin: true,
+  //     pathRewrite: { '/server/api/': 'yyrygl/' },
+  //   },
+  // },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

@@ -3,7 +3,7 @@ import md5 from 'md5';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 /* import Link from 'umi/link'; */
-import { Checkbox, Alert /* Icon */ } from 'antd';
+import { Checkbox, Alert /* Icon */, message } from 'antd';
 import Login from '@/components/Login';
 import styles from './Login.less';
 
@@ -50,6 +50,11 @@ class LoginPage extends Component {
           userName: values.userName,
           password: md5(values.password),
           type,
+        },
+        callback: resp => {
+          if (!resp.status) {
+            message.error(resp.msg);
+          }
         },
       });
     }
