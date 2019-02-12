@@ -10,7 +10,9 @@ import {
   Icon,
   Button,
   DatePicker,
+  Modal,
   /* InputNumber, */
+  message,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -23,6 +25,65 @@ const getValue = obj =>
     .map(key => obj[key])
     .join(',');
 
+const ExportForm = Form.create()(props => {
+  const { modalVisible, form, handleExport, handleModalVisible } = props;
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      form.resetFields();
+      handleExport(fieldsValue);
+    });
+  };
+  const { getFieldDecorator } = form;
+
+  return (
+    <Modal
+      width={700}
+      destroyOnClose
+      title="人员录入"
+      visible={modalVisible}
+      onOk={okHandle}
+      onCancel={() => handleModalVisible()}
+    >
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="机构名称">
+            {getFieldDecorator('JGMC', {
+              rules: [
+                { required: true, message: '机构名不能为空！' },
+                { max: 20, message: '机构名称过长！' },
+              ],
+            })(<Input placeholder="请输入机构名称" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="机构代码">
+            {getFieldDecorator('JGDM', {
+              rules: [{ required: true, message: '机构代码不能为空！' }],
+            })(<Input placeholder="请输入机构代码" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="姓名">
+            {getFieldDecorator('RYMC', {
+              rules: [{ required: true, message: '姓名不能为空！' }],
+            })(<Input placeholder="请输入姓名" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="十位工号">
+            {getFieldDecorator('RYDM', {
+              rules: [{ required: true, message: '十位工号错误！', len: 10 }],
+            })(<Input placeholder="请输入十位工号" />)}
+          </FormItem>
+        </Col>
+      </Row>
+    </Modal>
+  );
+});
+
 /* eslint react/no-multi-comp:0 */
 @connect(({ markhislist, loading }) => ({
   markhislist,
@@ -31,6 +92,7 @@ const getValue = obj =>
 @Form.create()
 class MarkHisManage extends PureComponent {
   state = {
+    modalVisible: false,
     expandForm: false,
     expandRowByClick: true,
     selectedRows: [],
@@ -117,6 +179,37 @@ class MarkHisManage extends PureComponent {
     });
   };
 
+  handleModalVisible = flag => {
+    this.setState({
+      modalVisible: !!flag,
+    });
+  };
+
+  handleExport = e => {
+    // TODO
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+    if (selectedRows.length === 0) return;
+    switch (e.key) {
+      case 'export':
+        dispatch({
+          type: 'markhislist/export',
+          payload: {
+            deleteData: selectedRows.map(row => ({ RYDM: row.JFSD, JGDM: row.RYDM })),
+            token: getToken(),
+          },
+          callback: resp => {
+            if (!resp.status) {
+              message.error(resp.msg);
+            }
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -136,18 +229,6 @@ class MarkHisManage extends PureComponent {
     this.setState({
       expandForm: !expandForm,
     });
-  };
-
-  handleButtonClick = e => {
-    // const { dispatch } = this.props;
-    const { selectedRows } = this.state;
-    if (selectedRows.length === 0) return;
-    switch (e.key) {
-      case 'export':
-        break;
-      default:
-        break;
-    }
   };
 
   handleSelectRows = rows => {
@@ -321,8 +402,11 @@ class MarkHisManage extends PureComponent {
       markhislist: { data },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
-    const { expandRowByClick } = this.state;
+    const { selectedRows, expandRowByClick, modalVisible } = this.state;
+    const parentMethods = {
+      handleExport: this.handleExport,
+      handleModalVisible: this.handleModalVisible,
+    };
     return (
       <PageHeaderWrapper title="">
         <Card bordered={false} bodyStyle={{ padding: '24px 24px' }}>
@@ -331,7 +415,7 @@ class MarkHisManage extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button key="export" onClick={this.handleButtonClick}>
+                  <Button key="export" onClick={() => this.handleModalVisible(true)}>
                     批量导出
                   </Button>
                 </span>
@@ -350,6 +434,7 @@ class MarkHisManage extends PureComponent {
             />
           </div>
         </Card>
+        <ExportForm {...parentMethods} modalVisible={modalVisible} />
       </PageHeaderWrapper>
     );
   }

@@ -300,6 +300,7 @@ class UpdateForm extends PureComponent {
       if (err) return;
       const updateVals = this.findDiff(oldValue, fieldsValue);
       if (Object.keys(updateVals).length === 0) return;
+      updateVals.BZ = fieldsValue.BZ;
       this.setState(
         {
           updateVals,
@@ -308,7 +309,7 @@ class UpdateForm extends PureComponent {
           if (currentStep < 1) {
             this.forward();
           } else {
-            const updateData = { ...updateVals, RYDM: oldValue.RYDM };
+            const updateData = { ...updateVals, RYDM: oldValue.RYDM, oldJGDM: oldValue.JGDM };
             if (updateData.XGWSGSJ !== undefined)
               updateData.XGWSGSJ = moment(updateData.XGWSGSJ).format('YYYY-MM-DD');
             handleUpdate(updateData);
@@ -363,6 +364,7 @@ class UpdateForm extends PureComponent {
         SYQK: '生育情况',
         JTZZ: '家庭住址',
         JCLX: '人员分组',
+        BZ: '备注',
       };
       for (let i = 0; i < updateNames.length; i += 1) {
         formItems.push(
@@ -373,11 +375,16 @@ class UpdateForm extends PureComponent {
             label={labels[updateNames[i]]}
           >
             {form.getFieldDecorator(updateNames[i], { initialValue: updateVals[updateNames[i]] })(
-              <Input />
+              updateNames[i] !== 'XGWSGSJ' ? (
+                <Input />
+              ) : (
+                <DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} />
+              )
             )}
           </FormItem>
         );
       }
+
       return formItems;
     }
     return [
@@ -525,152 +532,9 @@ class BasicInfoManage extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
+    filteredInfo: {},
+    sortedInfo: {},
   };
-
-  columns = [
-    {
-      title: '机构名称',
-      dataIndex: 'JGMC',
-      sorter: true,
-      fixed: 'left',
-      width: 150,
-    },
-    {
-      title: '人员姓名',
-      dataIndex: 'RYMC',
-      sorter: true,
-      fixed: 'left',
-      width: 125,
-    },
-    {
-      title: '机构代码',
-      dataIndex: 'JGDM',
-      sorter: true,
-      width: 150,
-    },
-    {
-      title: '人员代码',
-      key: 'RYDM',
-      dataIndex: 'RYDM',
-      sorter: true,
-      width: 125,
-    },
-    {
-      title: '性别',
-      dataIndex: 'XB',
-      // sorter:true,
-      width: 100,
-    },
-    {
-      title: '身份证号码',
-      dataIndex: 'SFZH',
-      width: 150,
-    },
-    {
-      title: '联系电话',
-      dataIndex: 'LXDH',
-      width: 150,
-    },
-    {
-      title: '员工类型',
-      dataIndex: 'YGLX',
-      width: 150,
-    },
-    {
-      title: '金融工作从业时间',
-      dataIndex: 'JRGZCYSJ',
-      width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-    },
-    {
-      title: '本行运营岗位上岗时间',
-      dataIndex: 'YYGWSGSJ',
-      width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-    },
-    {
-      title: '入行时间',
-      dataIndex: 'RHSJ',
-      width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-    },
-    {
-      title: '现岗位',
-      dataIndex: 'XGW',
-      width: 150,
-    },
-    {
-      title: '现岗位上岗时间',
-      dataIndex: 'XGWSGSJ',
-      width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
-    },
-    {
-      title: '第一学历',
-      dataIndex: 'DYXL',
-      width: 150,
-    },
-    {
-      title: '最高学历',
-      dataIndex: 'ZGXL',
-      width: 150,
-    },
-    {
-      title: '是否全日制',
-      dataIndex: 'SFQRZ',
-      width: 150,
-    },
-    {
-      title: '婚姻情况',
-      dataIndex: 'HYQK',
-      width: 150,
-    },
-    {
-      title: '生育情况',
-      dataIndex: 'SYQK',
-      width: 150,
-    },
-    {
-      title: '家庭住址',
-      dataIndex: 'JTZZ',
-      width: 150,
-    },
-    {
-      title: '人员分组',
-      dataIndex: 'JCLX',
-      width: 120,
-    },
-    {
-      title: '状态',
-      dataIndex: 'ZT',
-      width: 150,
-      filters: [
-        {
-          text: status[0],
-          value: 0,
-        },
-        {
-          text: status[1],
-          value: 1,
-        },
-      ],
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
-    },
-    {
-      title: '操作',
-      width: 150,
-      fixed: 'right',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>变更</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleSingleDelete(record)}>删除</a>
-        </Fragment>
-      ),
-    },
-  ];
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -690,13 +554,12 @@ class BasicInfoManage extends PureComponent {
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
-
+    console.log(filtersArg);
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
       return newObj;
     }, {});
-
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
@@ -706,6 +569,12 @@ class BasicInfoManage extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
+
+    this.setState({
+      filteredInfo: filtersArg,
+      sortedInfo: sorter,
+    });
+
     dispatch({
       type: 'infolist/fetch',
       payload: {
@@ -755,7 +624,7 @@ class BasicInfoManage extends PureComponent {
         dispatch({
           type: 'infolist/remove',
           payload: {
-            deleteData: selectedRows.map(row => `"${row.RYDM}"`),
+            deleteData: selectedRows.map(row => ({ RYDM: row.RYDM, JGDM: row.JGDM })),
             token: getToken(),
           },
           callback: resp => {
@@ -799,7 +668,7 @@ class BasicInfoManage extends PureComponent {
     dispatch({
       type: 'infolist/remove',
       payload: {
-        deleteData: [record].map(row => `"${row.RYDM}"`),
+        deleteData: [record].map(row => ({ RYDM: row.RYDM, JGDM: row.JGDM })),
         token: getToken(),
       },
       callback: resp => {
@@ -823,19 +692,18 @@ class BasicInfoManage extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-
     const { dispatch, form } = this.props;
-
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
       const params = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
         formValues: params,
+        filteredInfo: {},
+        sortedInfo: {},
       });
 
       dispatch({
@@ -1022,6 +890,7 @@ class BasicInfoManage extends PureComponent {
       infolist: { data },
       loading,
     } = this.props;
+    const { sortedInfo, filteredInfo } = this.state;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -1029,6 +898,155 @@ class BasicInfoManage extends PureComponent {
         <Menu.Item key="remove">批量删除</Menu.Item>
       </Menu>
     );
+
+    const columns = [
+      {
+        title: '机构名称',
+        dataIndex: 'JGMC',
+        sorter: true,
+        sortOrder: sortedInfo.columnKey === 'JGMC' && sortedInfo.order,
+        fixed: 'left',
+        width: 150,
+      },
+      {
+        title: '人员姓名',
+        dataIndex: 'RYMC',
+        sorter: true,
+        sortOrder: sortedInfo.columnKey === 'RYMC' && sortedInfo.order,
+        fixed: 'left',
+        width: 125,
+      },
+      {
+        title: '机构代码',
+        dataIndex: 'JGDM',
+        sorter: true,
+        sortOrder: sortedInfo.columnKey === 'JGDM' && sortedInfo.order,
+        width: 150,
+      },
+      {
+        title: '人员代码',
+        key: 'RYDM',
+        dataIndex: 'RYDM',
+        sorter: true,
+        sortOrder: sortedInfo.columnKey === 'RYDM' && sortedInfo.order,
+        width: 125,
+      },
+      {
+        title: '性别',
+        dataIndex: 'XB',
+        width: 100,
+      },
+      {
+        title: '身份证号码',
+        dataIndex: 'SFZH',
+        width: 150,
+      },
+      {
+        title: '联系电话',
+        dataIndex: 'LXDH',
+        width: 150,
+      },
+      {
+        title: '员工类型',
+        dataIndex: 'YGLX',
+        width: 150,
+      },
+      {
+        title: '金融工作从业时间',
+        dataIndex: 'JRGZCYSJ',
+        width: 150,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      },
+      {
+        title: '本行运营岗位上岗时间',
+        dataIndex: 'YYGWSGSJ',
+        width: 150,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      },
+      {
+        title: '入行时间',
+        dataIndex: 'RHSJ',
+        width: 150,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      },
+      {
+        title: '现岗位',
+        dataIndex: 'XGW',
+        width: 150,
+      },
+      {
+        title: '现岗位上岗时间',
+        dataIndex: 'XGWSGSJ',
+        width: 150,
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      },
+      {
+        title: '第一学历',
+        dataIndex: 'DYXL',
+        width: 150,
+      },
+      {
+        title: '最高学历',
+        dataIndex: 'ZGXL',
+        width: 150,
+      },
+      {
+        title: '是否全日制',
+        dataIndex: 'SFQRZ',
+        width: 150,
+      },
+      {
+        title: '婚姻情况',
+        dataIndex: 'HYQK',
+        width: 150,
+      },
+      {
+        title: '生育情况',
+        dataIndex: 'SYQK',
+        width: 150,
+      },
+      {
+        title: '家庭住址',
+        dataIndex: 'JTZZ',
+        width: 150,
+      },
+      {
+        title: '人员分组',
+        dataIndex: 'JCLX',
+        width: 120,
+      },
+      {
+        title: '状态',
+        dataIndex: 'ZT',
+        width: 150,
+        filters: [
+          {
+            text: status[0],
+            value: 0,
+          },
+          {
+            text: status[1],
+            value: 1,
+          },
+        ],
+        filteredValue: filteredInfo.ZT || ['1'],
+        render(val) {
+          return <Badge status={statusMap[val]} text={status[val]} />;
+        },
+      },
+      {
+        title: '操作',
+        width: 150,
+        fixed: 'right',
+        render: (text, record) => (
+          <Fragment>
+            <a onClick={() => this.handleUpdateModalVisible(true, record)}>变更</a>
+            <Divider type="vertical" />
+            <a onClick={() => this.handleSingleDelete(record)}>删除</a>
+          </Fragment>
+        ),
+      },
+    ];
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -1063,7 +1081,7 @@ class BasicInfoManage extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
-              columns={this.columns}
+              columns={columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               rowKey="RYDM"
