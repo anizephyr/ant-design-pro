@@ -532,8 +532,11 @@ class BasicInfoManage extends PureComponent {
     selectedRows: [],
     formValues: {},
     stepFormValues: {},
-    filteredInfo: {},
-    sortedInfo: {},
+    filter: null,
+    filteredObj: {},
+    sorter: null,
+    sortedObj: {},
+    pagination: null,
   };
 
   componentDidMount() {
@@ -541,6 +544,7 @@ class BasicInfoManage extends PureComponent {
     dispatch({
       type: 'infolist/fetch',
       payload: {
+        selectData: { ZT: '1' },
         token: getToken(),
       },
       callback: resp => {
@@ -554,7 +558,6 @@ class BasicInfoManage extends PureComponent {
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const { formValues } = this.state;
-    console.log(filtersArg);
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -568,17 +571,22 @@ class BasicInfoManage extends PureComponent {
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
+      this.setState({
+        sorter: `${sorter.field}_${sorter.order}`,
+      });
     }
 
     this.setState({
-      filteredInfo: filtersArg,
-      sortedInfo: sorter,
+      sortedObj: sorter,
+      filter: filters,
+      filteredObj: filtersArg,
+      pagination,
     });
 
     dispatch({
       type: 'infolist/fetch',
       payload: {
-        ...params,
+        selectData: params,
         token: getToken(),
       },
       callback: resp => {
@@ -598,6 +606,7 @@ class BasicInfoManage extends PureComponent {
     dispatch({
       type: 'infolist/fetch',
       payload: {
+        selectData: { ZT: '1' },
         token: getToken(),
       },
       callback: resp => {
@@ -618,12 +627,19 @@ class BasicInfoManage extends PureComponent {
   handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
+    const { sorter, filter, formValues } = this.state;
+    const params = {
+      sorter,
+      ...formValues,
+      ...filter,
+    };
     if (selectedRows.length === 0) return;
     switch (e.key) {
       case 'remove':
         dispatch({
           type: 'infolist/remove',
           payload: {
+            selectData: params,
             deleteData: selectedRows.map(row => ({ RYDM: row.RYDM, JGDM: row.JGDM })),
             token: getToken(),
           },
@@ -643,7 +659,7 @@ class BasicInfoManage extends PureComponent {
         dispatch({
           type: 'infolist/update',
           payload: {
-            updateDatas: '',
+            updateData: '',
             token: getToken(),
           },
           callback: resp => {
@@ -665,9 +681,16 @@ class BasicInfoManage extends PureComponent {
 
   handleSingleDelete = record => {
     const { dispatch } = this.props;
+    const { sorter, filter, formValues } = this.state;
+    const params = {
+      sorter,
+      ...formValues,
+      ...filter,
+    };
     dispatch({
       type: 'infolist/remove',
       payload: {
+        selectData: params,
         deleteData: [record].map(row => ({ RYDM: row.RYDM, JGDM: row.JGDM })),
         token: getToken(),
       },
@@ -693,23 +716,23 @@ class BasicInfoManage extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
+    const { sorter, filter } = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-
       const params = {
+        sorter,
         ...fieldsValue,
+        ...filter,
       };
 
       this.setState({
         formValues: params,
-        filteredInfo: {},
-        sortedInfo: {},
       });
 
       dispatch({
         type: 'infolist/fetch',
         payload: {
-          ...params,
+          selectData: params,
           token: getToken(),
         },
         callback: resp => {
@@ -736,10 +759,18 @@ class BasicInfoManage extends PureComponent {
 
   handleAdd = fields => {
     const { dispatch } = this.props;
+    const { sorter, filter, formValues } = this.state;
+    const params = {
+      sorter,
+      ...formValues,
+      ...filter,
+    };
+
     dispatch({
       type: 'infolist/add',
       payload: {
         token: getToken(),
+        selectData: params,
         addData: {
           JGMC: fields.JGMC,
           RYMC: fields.RYMC,
@@ -776,9 +807,19 @@ class BasicInfoManage extends PureComponent {
 
   handleUpdate = fields => {
     const { dispatch } = this.props;
+    const { sorter, filter, pagination, formValues } = this.state;
+
+    const params = {
+      sorter,
+      ...formValues,
+      ...filter,
+      ...pagination,
+    };
+
     dispatch({
       type: 'infolist/update',
       payload: {
+        selectData: params,
         updateData: fields,
         token: getToken(),
       },
@@ -890,7 +931,7 @@ class BasicInfoManage extends PureComponent {
       infolist: { data },
       loading,
     } = this.props;
-    const { sortedInfo, filteredInfo } = this.state;
+    const { sortedObj, filteredObj } = this.state;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
     const menu = (
       <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
@@ -904,7 +945,7 @@ class BasicInfoManage extends PureComponent {
         title: '机构名称',
         dataIndex: 'JGMC',
         sorter: true,
-        sortOrder: sortedInfo.columnKey === 'JGMC' && sortedInfo.order,
+        sortOrder: sortedObj.columnKey === 'JGMC' && sortedObj.order,
         fixed: 'left',
         width: 150,
       },
@@ -912,7 +953,7 @@ class BasicInfoManage extends PureComponent {
         title: '人员姓名',
         dataIndex: 'RYMC',
         sorter: true,
-        sortOrder: sortedInfo.columnKey === 'RYMC' && sortedInfo.order,
+        sortOrder: sortedObj.columnKey === 'RYMC' && sortedObj.order,
         fixed: 'left',
         width: 125,
       },
@@ -920,7 +961,7 @@ class BasicInfoManage extends PureComponent {
         title: '机构代码',
         dataIndex: 'JGDM',
         sorter: true,
-        sortOrder: sortedInfo.columnKey === 'JGDM' && sortedInfo.order,
+        sortOrder: sortedObj.columnKey === 'JGDM' && sortedObj.order,
         width: 150,
       },
       {
@@ -928,7 +969,7 @@ class BasicInfoManage extends PureComponent {
         key: 'RYDM',
         dataIndex: 'RYDM',
         sorter: true,
-        sortOrder: sortedInfo.columnKey === 'RYDM' && sortedInfo.order,
+        sortOrder: sortedObj.columnKey === 'RYDM' && sortedObj.order,
         width: 125,
       },
       {
@@ -1029,7 +1070,7 @@ class BasicInfoManage extends PureComponent {
             value: 1,
           },
         ],
-        filteredValue: filteredInfo.ZT || ['1'],
+        filteredValue: filteredObj.ZT || ['1'],
         render(val) {
           return <Badge status={statusMap[val]} text={status[val]} />;
         },

@@ -98,6 +98,7 @@ class ModifyHisList extends PureComponent {
     dispatch({
       type: 'modifyhislist/fetch',
       payload: {
+        selectData: {},
         token: getToken(),
       },
     });
@@ -125,7 +126,7 @@ class ModifyHisList extends PureComponent {
     dispatch({
       type: 'modifyhislist/fetch',
       payload: {
-        ...params,
+        selectData: params,
         token: getToken(),
       },
     });
@@ -140,6 +141,7 @@ class ModifyHisList extends PureComponent {
     dispatch({
       type: 'modifyhislist/fetch',
       payload: {
+        selectData: {},
         token: getToken(),
       },
     });
@@ -190,7 +192,7 @@ class ModifyHisList extends PureComponent {
       dispatch({
         type: 'modifyhislist/fetch',
         payload: {
-          ...params,
+          selectData: params,
           token: getToken(),
         },
       });
@@ -231,9 +233,14 @@ class ModifyHisList extends PureComponent {
         width: 150,
         render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
       },
+      {
+        title: '备注',
+        dataIndex: 'BZ',
+        width: 150,
+      },
     ];
 
-    return <Table dataSource={record.dataHis} columns={columns} pagination={false} />;
+    return <Table dataSource={record.ModifyHis} columns={columns} pagination={false} rowKey="ID" />;
   };
 
   renderSimpleForm() {
@@ -359,6 +366,7 @@ class ModifyHisList extends PureComponent {
               onChange={this.handleStandardTableChange}
               expandRowByClick={expandRowByClick}
               expandedRowRender={this.expandedRowRender}
+              rowKey="RYDM"
             />
           </div>
         </Card>
