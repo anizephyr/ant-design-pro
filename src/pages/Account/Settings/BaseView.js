@@ -2,6 +2,8 @@ import React, { Component /** Fragment */ } from 'react';
 import { /* formatMessage, */ FormattedMessage } from 'umi/locale';
 import { Form, Input, /** Upload, */ Select, Button, DatePicker, Row, Col } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
+
 import styles from './BaseView.less';
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
@@ -64,10 +66,12 @@ class BaseView extends Component {
     const { currentUser, form } = this.props;
     Object.keys(form.getFieldsValue()).forEach(key => {
       const obj = {};
-      obj[key] = currentUser[key] || null;
-      console.log(obj);
-
-      // form.setFieldsValue(obj);
+      if (key === 'JRGZCYSJ' || key === 'RHSJ' || key === 'XGWSGSJ' || key === 'YYGWSGSJ') {
+        obj[key] = moment(currentUser[key]) || null;
+      } else {
+        obj[key] = currentUser[key] || null;
+      }
+      form.setFieldsValue(obj);
     });
   };
 

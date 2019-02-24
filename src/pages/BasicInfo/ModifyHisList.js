@@ -8,10 +8,10 @@ import {
   Card,
   Form,
   Input,
-  Select,
   Icon,
   Button,
   /* InputNumber, */
+  message,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -20,7 +20,6 @@ import { getToken } from '@/utils/authority';
 import styles from './ModifyHisList.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -42,28 +41,24 @@ class ModifyHisList extends PureComponent {
 
   columns = [
     {
-      title: '机构名称',
-      dataIndex: 'JGMC',
-      sorter: true,
-      width: 150,
-    },
-    {
       title: '人员姓名',
       dataIndex: 'RYMC',
-      sorter: true,
       width: 125,
-    },
-    {
-      title: '机构代码',
-      dataIndex: 'JGDM',
-      sorter: true,
-      width: 150,
     },
     {
       title: '人员代码',
       dataIndex: 'RYDM',
-      sorter: true,
       width: 125,
+    },
+    {
+      title: '机构名称',
+      dataIndex: 'JGMC',
+      width: 150,
+    },
+    {
+      title: '机构代码',
+      dataIndex: 'JGDM',
+      width: 150,
     },
     {
       title: '员工类型',
@@ -71,24 +66,35 @@ class ModifyHisList extends PureComponent {
       width: 150,
     },
     {
-      title: '现岗位',
-      dataIndex: 'XGW',
+      title: '岗位',
+      dataIndex: 'GW',
       width: 150,
     },
     {
-      title: '现岗位上岗时间',
-      dataIndex: 'XGWSGSJ',
+      title: '上岗时间',
+      dataIndex: 'SGSJ',
       width: 150,
-      render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+      render: val => {
+        if (val === '') {
+          return '';
+        }
+        return <span>{moment(val).format('YYYY-MM-DD')}</span>;
+      },
     },
     {
-      title: '现婚姻情况',
-      dataIndex: 'HYQK',
+      title: '离岗时间',
+      dataIndex: 'LGSJ',
       width: 150,
+      render: val => {
+        if (val === '') {
+          return '';
+        }
+        return <span>{moment(val).format('YYYY-MM-DD')}</span>;
+      },
     },
     {
-      title: '现生育情况',
-      dataIndex: 'SYQK',
+      title: '备注',
+      dataIndex: 'BZ',
       width: 150,
     },
   ];
@@ -144,6 +150,11 @@ class ModifyHisList extends PureComponent {
         selectData: {},
         token: getToken(),
       },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
+      },
     });
   };
 
@@ -154,16 +165,26 @@ class ModifyHisList extends PureComponent {
     });
   };
 
-  handleButtonClick = e => {
-    // const { dispatch } = this.props;
-    const { selectedRows } = this.state;
+  handleExportClick = () => {
+    const { dispatch } = this.props;
+    const { selectedRows, formValues } = this.state;
     if (selectedRows.length === 0) return;
-    switch (e.key) {
-      case 'export':
-        break;
-      default:
-        break;
-    }
+    dispatch({
+      type: 'modifyhislist/export',
+      payload: {
+        selectData: formValues,
+        exportData: selectedRows.map(row => `'${row.RYDM}'`),
+        token: getToken(),
+      },
+      callback: blob => {
+        const aLink = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        const fileName = 'modifyhis.xlsx';
+        aLink.href = url;
+        aLink.download = fileName;
+        aLink.click();
+      },
+    });
   };
 
   handleSelectRows = rows => {
@@ -176,13 +197,14 @@ class ModifyHisList extends PureComponent {
     e.preventDefault();
 
     const { dispatch, form } = this.props;
+    const { sorter } = this.state;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
       const params = {
+        sorter,
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
@@ -202,6 +224,16 @@ class ModifyHisList extends PureComponent {
   expandedRowRender = record => {
     const columns = [
       {
+        title: '人员姓名',
+        dataIndex: 'RYMC',
+        width: 125,
+      },
+      {
+        title: '人员代码',
+        dataIndex: 'RYDM',
+        width: 125,
+      },
+      {
         title: '机构名称',
         dataIndex: 'JGMC',
         width: 150,
@@ -217,7 +249,7 @@ class ModifyHisList extends PureComponent {
         width: 150,
       },
       {
-        title: '原岗位',
+        title: '岗位',
         dataIndex: 'GW',
         width: 150,
       },
@@ -225,13 +257,23 @@ class ModifyHisList extends PureComponent {
         title: '上岗时间',
         dataIndex: 'SGSJ',
         width: 150,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+        render: val => {
+          if (val === '') {
+            return '';
+          }
+          return <span>{moment(val).format('YYYY-MM-DD')}</span>;
+        },
       },
       {
         title: '离岗时间',
         dataIndex: 'LGSJ',
         width: 150,
-        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
+        render: val => {
+          if (val === '') {
+            return '';
+          }
+          return <span>{moment(val).format('YYYY-MM-DD')}</span>;
+        },
       },
       {
         title: '备注',
@@ -295,21 +337,11 @@ class ModifyHisList extends PureComponent {
               {getFieldDecorator('RYMC')(<Input placeholder="请输入人员姓名" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="人员代码">
-              {getFieldDecorator('RYDM')(<Input placeholder="请输入人员工号" />)}
-            </FormItem>
-          </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="员工类型">
-              {getFieldDecorator('YGLX')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="正式">正式</Option>
-                  <Option value="派遣">派遣</Option>
-                </Select>
-              )}
+            <FormItem label="人员代码">
+              {getFieldDecorator('RYDM')(<Input placeholder="请输入人员工号" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -350,7 +382,12 @@ class ModifyHisList extends PureComponent {
             <div className={styles.tableListOperator}>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button key="export" onClick={this.handleButtonClick}>
+                  <Button
+                    key="export"
+                    icon="export"
+                    type="primary"
+                    onClick={this.handleExportClick}
+                  >
                     批量导出
                   </Button>
                 </span>
@@ -361,6 +398,7 @@ class ModifyHisList extends PureComponent {
               selectedRows={selectedRows}
               loading={loading}
               data={data}
+              pagination={false}
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}

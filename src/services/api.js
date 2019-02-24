@@ -181,6 +181,20 @@ export async function queryModifyHisList(params) {
   });
 }
 
+export async function exportModifyHisList(params) {
+  const body = { ...params, method: 'export' };
+  return fetch('/server/api/modifyhisHandler', {
+    method: 'POST',
+    credentials: 'include',
+    // expirys: false,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(body),
+  }).then(resp => resp.blob());
+}
+
 // 积分管理
 export async function queryMarkHisList(params) {
   return request('/server/api/markhisHandler', {

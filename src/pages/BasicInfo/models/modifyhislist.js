@@ -1,4 +1,4 @@
-import { queryModifyHisList } from '@/services/api';
+import { queryModifyHisList, exportModifyHisList } from '@/services/api';
 
 export default {
   namespace: 'modifyhislist',
@@ -6,18 +6,22 @@ export default {
   state: {
     data: {
       list: [],
-      pagination: {},
+      // pagination: {},
     },
-    dataHis: {},
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetch({ payload, callback }, { call, put }) {
       const response = yield call(queryModifyHisList, payload);
       yield put({
         type: 'save',
         payload: response,
       });
+      if (callback) callback(response);
+    },
+    *export({ payload, callback }, { call }) {
+      const response = yield call(exportModifyHisList, payload);
+      if (callback) callback(response);
     },
   },
 

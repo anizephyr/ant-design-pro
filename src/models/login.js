@@ -15,13 +15,12 @@ export default {
   effects: {
     *login({ payload, callback }, { call, put }) {
       const response = yield call(accountLogin, payload);
-      console.log(response);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
       // Login successfully
       if (response.status) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
