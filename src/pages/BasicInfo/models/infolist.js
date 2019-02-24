@@ -1,4 +1,4 @@
-import { queryInfoList, removeInfoList, addInfoList, updateInfoList } from '@/services/api';
+import { queryInfoList, removeInfoList, addInfoList, updateInfoList } from '@/services/basicinfo';
 
 export default {
   namespace: 'infolist',

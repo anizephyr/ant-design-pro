@@ -13,3 +13,14 @@ export async function queryCurrent(params) {
     },
   });
 }
+
+// 登陆
+export async function accountLogin(params) {
+  return request('/server/api/userHandler', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'login',
+    },
+  });
+}

@@ -179,7 +179,7 @@ class ModifyHisList extends PureComponent {
       callback: blob => {
         const aLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const fileName = 'modifyhis.xlsx';
+        const fileName = '机构岗位变动记录导出.xlsx';
         aLink.href = url;
         aLink.download = fileName;
         aLink.click();

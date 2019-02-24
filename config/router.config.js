@@ -19,6 +19,7 @@ export default [
     routes: [
       // dashboard
       { path: '/', redirect: '/basicinfo/basicinfomanage' },
+      /*
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -41,6 +42,7 @@ export default [
           },
         ],
       },
+      */
       //人员基本信息:1.基本信息维护2.变更记录3.积分管理
       {
         path: '/basicinfo',

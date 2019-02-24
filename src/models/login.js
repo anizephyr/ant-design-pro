@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { accountLogin, accountLogout, getFakeCaptcha } from '@/services/api';
+import { accountLogin, accountLogout, getFakeCaptcha } from '@/services/user';
 import { setAuthority, setToken } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
