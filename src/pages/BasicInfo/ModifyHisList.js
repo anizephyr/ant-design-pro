@@ -107,6 +107,11 @@ class ModifyHisList extends PureComponent {
         selectData: {},
         token: getToken(),
       },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
+      },
     });
   }
 
@@ -134,6 +139,11 @@ class ModifyHisList extends PureComponent {
       payload: {
         selectData: params,
         token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        }
       },
     });
   };
@@ -216,6 +226,11 @@ class ModifyHisList extends PureComponent {
         payload: {
           selectData: params,
           token: getToken(),
+        },
+        callback: resp => {
+          if (!resp.status) {
+            message.error(resp.msg);
+          }
         },
       });
     });

@@ -12,6 +12,8 @@ import {
   /* InputNumber, */
   message,
   DatePicker,
+  Modal,
+  Upload,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -19,6 +21,7 @@ import { getToken } from '@/utils/authority';
 
 import styles from './MarkHisManage.less';
 
+const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const getValue = obj =>
@@ -27,6 +30,110 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
+const CreateForm = Form.create()(props => {
+  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      form.resetFields();
+      handleAdd(fieldsValue);
+    });
+  };
+  const { getFieldDecorator } = form;
+
+  return (
+    <Modal
+      width={700}
+      destroyOnClose
+      title="人员录入"
+      visible={modalVisible}
+      onOk={okHandle}
+      onCancel={() => handleModalVisible()}
+    >
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="机构名称">
+            {getFieldDecorator('JGMC', {
+              rules: [
+                { required: true, message: '机构名不能为空！' },
+                { max: 20, message: '机构名称过长！' },
+              ],
+            })(<Input placeholder="请输入机构名称" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="机构代码">
+            {getFieldDecorator('JGDM', {
+              rules: [{ required: true, message: '机构代码不能为空！' }],
+            })(<Input placeholder="请输入机构代码" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="姓名">
+            {getFieldDecorator('RYMC', {
+              rules: [{ required: true, message: '姓名不能为空！' }],
+            })(<Input placeholder="请输入姓名" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="十位工号">
+            {getFieldDecorator('RYDM', {
+              rules: [{ required: true, message: '十位工号错误！', len: 10 }],
+            })(<Input placeholder="请输入十位工号" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="岗位">
+            {getFieldDecorator('GW', {
+              rules: [{ required: true, message: '岗位不能为空！' }],
+            })(<Input placeholder="请输入岗位" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="考试项目">
+            {getFieldDecorator('XMMC', {
+              rules: [{ required: true, message: '项目名称不能为空！' }],
+            })(<Input placeholder="请输入项目名称" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="得分">
+            {getFieldDecorator('DF', {
+              rules: [{ required: true, message: '输入不能为空！' }],
+            })(<Input placeholder="请输入得分" />)}
+          </FormItem>
+        </Col>
+        <Col span={8}>
+          <FormItem label="积分">
+            {getFieldDecorator('JF', {
+              rules: [{ required: true, message: '输入不能为空！' }],
+            })(<Input placeholder="请输入积分" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={8}>
+          <FormItem label="考试时间">
+            {getFieldDecorator('KSSJ', {
+              rules: [{ required: true, message: '选项不能为空！' }],
+            })(
+              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试时间" />
+            )}
+          </FormItem>
+        </Col>
+      </Row>
+      <FormItem label="备注">
+        {getFieldDecorator('BZ')(<TextArea row={2} placeholder="请输入备注" />)}
+      </FormItem>
+    </Modal>
+  );
+});
 @connect(({ markhislist, loading }) => ({
   markhislist,
   loading: loading.models.markhislist,
@@ -34,6 +141,7 @@ const getValue = obj =>
 @Form.create()
 class MarkHisManage extends PureComponent {
   state = {
+    modalVisible: false,
     expandRowByClick: true,
     selectedRows: [],
     formValues: {},
@@ -122,6 +230,12 @@ class MarkHisManage extends PureComponent {
     });
   };
 
+  handleModalVisible = flag => {
+    this.setState({
+      modalVisible: !!flag,
+    });
+  };
+
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -140,6 +254,23 @@ class MarkHisManage extends PureComponent {
         }
       },
     });
+  };
+
+  handleUploadChange = info => {
+    if (info.file.status !== 'uploading') {
+      // console.log(info.event);
+    }
+    if (info.file.status === 'done') {
+      const resp = info.file.response;
+      if (resp.status) {
+        message.success(`${info.file.name} 文件提交成功！`);
+      } else {
+        message.error(`${info.file.name} 文件提交失败！${resp.msg}`);
+        console.log(resp.msg);
+      }
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} 文件提交失败！`);
+    }
   };
 
   handleExportClick = () => {
@@ -212,6 +343,11 @@ class MarkHisManage extends PureComponent {
           selectData: params,
           token: getToken(),
         },
+        callback: resp => {
+          if (!resp.status) {
+            message.error(resp.msg);
+          }
+        },
       });
     });
   };
@@ -234,6 +370,44 @@ class MarkHisManage extends PureComponent {
       callback: resp => {
         if (resp.status) {
           message.success(resp.msg);
+        } else {
+          message.error(resp.msg);
+        }
+      },
+    });
+  };
+
+  handleAdd = fields => {
+    const { dispatch } = this.props;
+    const { sorter, filter, formValues } = this.state;
+    const params = {
+      sorter,
+      ...formValues,
+      ...filter,
+    };
+
+    dispatch({
+      type: 'markhislist/add',
+      payload: {
+        token: getToken(),
+        selectData: params,
+        addData: {
+          JGMC: fields.JGMC,
+          RYMC: fields.RYMC,
+          JGDM: fields.JGDM,
+          RYDM: fields.RYDM,
+          GW: fields.GW,
+          XMMC: fields.XMMC,
+          DF: fields.DF,
+          JF: fields.JF,
+          KSSJ: moment(fields.KSSJ).format('YYYY-MM-DD'),
+          BZ: fields.BZ == null ? '' : fields.BZ,
+        },
+      },
+      callback: resp => {
+        if (resp.status) {
+          message.success(resp.msg);
+          this.handleModalVisible();
         } else {
           message.error(resp.msg);
         }
@@ -363,35 +537,42 @@ class MarkHisManage extends PureComponent {
       markhislist: { data },
       loading,
     } = this.props;
-    const { selectedRows } = this.state;
-    const { expandRowByClick } = this.state;
+    const { selectedRows, modalVisible, expandRowByClick } = this.state;
+    const parentMethods = {
+      handleAdd: this.handleAdd,
+      handleModalVisible: this.handleModalVisible,
+    };
+    const uploadProps = {
+      name: 'import_markhis',
+      accept: '.xlsx',
+      action: '/server/api/uploadHandler',
+      showUploadList: true,
+      headers: {
+        Authorization: getToken(),
+      },
+    };
     return (
       <PageHeaderWrapper title="">
         <Card bordered={false} bodyStyle={{ padding: '24px 24px' }}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" onClick={this.handleAddClick}>
+              <Button icon="plus" onClick={() => this.handleModalVisible(true)}>
                 新增
               </Button>
-              <Button icon="import" type="primary" onClick={this.handleImportClick}>
-                数据导入
-              </Button>
+              {selectedRows.length > 0 && (
+                <Button key="export" icon="export" type="primary" onClick={this.handleExportClick}>
+                  批量导出
+                </Button>
+              )}
               <Button icon="download" type="dashed" onClick={this.handleDownloadTemplateClick}>
                 导入模版下载
               </Button>
-              {selectedRows.length > 0 && (
-                <span>
-                  <Button
-                    key="export"
-                    icon="export"
-                    type="primary"
-                    onClick={this.handleExportClick}
-                  >
-                    批量导出
-                  </Button>
-                </span>
-              )}
+              <Upload {...uploadProps} onChange={this.handleUploadChange}>
+                <Button icon="import" type="primary">
+                  数据导入
+                </Button>
+              </Upload>
             </div>
             <StandardTable
               scroll={{ x: 1300 }}
@@ -408,6 +589,7 @@ class MarkHisManage extends PureComponent {
             />
           </div>
         </Card>
+        <CreateForm {...parentMethods} modalVisible={modalVisible} />
       </PageHeaderWrapper>
     );
   }
