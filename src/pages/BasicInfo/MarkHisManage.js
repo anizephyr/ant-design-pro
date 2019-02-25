@@ -45,7 +45,7 @@ const CreateForm = Form.create()(props => {
     <Modal
       width={700}
       destroyOnClose
-      title="人员录入"
+      title="积分信息录入"
       visible={modalVisible}
       onOk={okHandle}
       onCancel={() => handleModalVisible()}
