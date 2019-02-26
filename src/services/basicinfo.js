@@ -1,8 +1,9 @@
 import request from '@/utils/request';
 
+const apiPath = '/DAP/yyrygl/';
 // 基本信息维护
 export async function queryInfoList(params) {
-  return request('/server/api/infolistHandler', {
+  return request(`${apiPath}infolistHandler`, {
     method: 'POST',
     body: {
       ...params,
@@ -12,7 +13,7 @@ export async function queryInfoList(params) {
 }
 
 export async function removeInfoList(params) {
-  return request('/server/api/infolistHandler', {
+  return request(`${apiPath}infolistHandler`, {
     method: 'POST',
     body: {
       ...params,
@@ -22,7 +23,7 @@ export async function removeInfoList(params) {
 }
 
 export async function addInfoList(params) {
-  return request('/server/api/infolistHandler', {
+  return request(`${apiPath}infolistHandler`, {
     method: 'POST',
     body: {
       ...params,
@@ -32,7 +33,7 @@ export async function addInfoList(params) {
 }
 
 export async function updateInfoList(params) {
-  return request('/server/api/infolistHandler', {
+  return request(`${apiPath}infolistHandler`, {
     method: 'POST',
     body: {
       ...params,

@@ -3,6 +3,7 @@ import { notification } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
 import { isAntdPro } from './utils';
+import { getToken } from '@/utils/authority';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -136,6 +137,9 @@ export default function request(url, option) {
         /* eslint-disable no-underscore-dangle */
         window.g_app._store.dispatch({
           type: 'login/logout',
+          payload: {
+            token: getToken(),
+          },
         });
         return;
       }

@@ -71,10 +71,10 @@ export default {
     '@antv/data-set': 'DataSet',
   },
   proxy: {
-    '/server/api/': {
-      target: 'http://127.0.0.1:8080/DAP/',
+    '/DAP/yyrygl/': {
+      target: 'http://127.0.0.1:8080/',
       changeOrigin: true,
-      pathRewrite: { '/server/api/': 'yyrygl/' },
+      // pathRewrite: { '/server/api/': '' },
     },
   },
   ignoreMomentLocale: true,
@@ -109,4 +109,6 @@ export default {
   },
 
   chainWebpack: webpackPlugin,
+  // base:'/OSMS',
+  // publicPath:'/',
 };

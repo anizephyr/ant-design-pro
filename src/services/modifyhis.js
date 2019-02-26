@@ -1,8 +1,10 @@
 import request from '@/utils/request';
 
+const apiPath = '/DAP/yyrygl/';
+
 // 基本信息变更历史纪录
 export async function queryModifyHisList(params) {
-  return request('/server/api/modifyhisHandler', {
+  return request(`${apiPath}modifyhisHandler`, {
     method: 'POST',
     body: {
       ...params,
@@ -13,7 +15,7 @@ export async function queryModifyHisList(params) {
 
 export async function exportModifyHisList(params) {
   const body = { ...params, method: 'export' };
-  return fetch('/server/api/modifyhisHandler', {
+  return fetch(`${apiPath}modifyhisHandler`, {
     method: 'POST',
     credentials: 'include',
     // expirys: false,

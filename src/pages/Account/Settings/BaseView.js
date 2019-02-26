@@ -1,57 +1,14 @@
-import React, { Component /** Fragment */ } from 'react';
-import { /* formatMessage, */ FormattedMessage } from 'umi/locale';
-import { Form, Input, /** Upload, */ Select, Button, DatePicker, Row, Col } from 'antd';
+import React, { Component } from 'react';
+import { FormattedMessage } from 'umi/locale';
+import { Form, Input, Select, Button, DatePicker, Row, Col } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 
 import styles from './BaseView.less';
-// import GeographicView from './GeographicView';
-// import PhoneView from './PhoneView';
-// import { getTimeDistance } from '@/utils/utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
-// 头像组件 方便以后独立，增加裁剪之类的功能
-/** const AvatarView = ({ avatar }) => (
-  <Fragment>
-    <div className={styles.avatar_title}>
-      <FormattedMessage id="app.settings.basic.avatar" defaultMessage="Avatar" />
-    </div>
-    <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
-    </div>
-    <Upload fileList={[]}>
-      <div className={styles.button_view}>
-        <Button icon="upload">
-          <FormattedMessage id="app.settings.basic.change-avatar" defaultMessage="Change avatar" />
-        </Button>
-      </div>
-    </Upload>
-  </Fragment>
-); 
-
-const validatorGeographic = (rule, value, callback) => {
-  const { province, city } = value;
-  if (!province.key) {
-    callback('Please input your province!');
-  }
-  if (!city.key) {
-    callback('Please input your city!');
-  }
-  callback();
-};
-
-const validatorPhone = (rule, value, callback) => {
-  const values = value.split('-');
-  if (!values[0]) {
-    callback('Please input your area code!');
-  }
-  if (!values[1]) {
-    callback('Please input your phone number!');
-  }
-  callback();
-}; */
 
 @connect(({ user }) => ({
   currentUser: user.currentUser,

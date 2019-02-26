@@ -7,6 +7,7 @@ import router from 'umi/router';
 import GlobalHeader from '@/components/GlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
 import styles from './Header.less';
+import { getToken } from '@/utils/authority';
 
 const { Header } = Layout;
 
@@ -71,6 +72,9 @@ class HeaderView extends PureComponent {
     if (key === 'logout') {
       dispatch({
         type: 'login/logout',
+        payload: {
+          token: getToken(),
+        },
       });
     }
   };
