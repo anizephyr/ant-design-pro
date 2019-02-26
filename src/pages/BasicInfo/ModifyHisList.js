@@ -409,7 +409,6 @@ class ModifyHisList extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 1450 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

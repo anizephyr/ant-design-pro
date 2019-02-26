@@ -265,7 +265,7 @@ class MarkHisManage extends PureComponent {
       if (resp.status) {
         message.success(`${info.file.name} 文件提交成功！`);
       } else {
-        message.error(`${info.file.name} 文件提交失败！${resp.msg}`);
+        message.error(`${info.file.name} 文件提交失败！${resp.msg}`, 7);
         console.log(resp.msg);
       }
     } else if (info.file.status === 'error') {
@@ -575,7 +575,6 @@ class MarkHisManage extends PureComponent {
               </Upload>
             </div>
             <StandardTable
-              scroll={{ x: 1300 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

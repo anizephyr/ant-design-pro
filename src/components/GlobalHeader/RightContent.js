@@ -106,7 +106,8 @@ export default class GlobalHeaderRight extends PureComponent {
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src="./BiazfanxmamNRoxxVxka.png"
+                style={{ backgroundColor: '#87d068' }}
+                icon="user"
                 alt="avatar"
               />
               <span className={styles.name}>{currentUser.RYMC}</span>
