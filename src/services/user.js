@@ -37,3 +37,14 @@ export async function accountLogout(params) {
     },
   });
 }
+
+// 修改密码
+export async function changePassword(params) {
+  return request(`${apiPath}userHandler`, {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'change',
+    },
+  });
+}

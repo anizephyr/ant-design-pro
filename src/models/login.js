@@ -28,7 +28,9 @@ export default {
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
+            redirect = redirect
+              .substr(urlParams.origin.length)
+              .substr(urlParams.pathname.replace('/user/login', '').length);
             if (redirect.match(/^\/.*#/)) {
               redirect = redirect.substr(redirect.indexOf('#') + 1);
             }

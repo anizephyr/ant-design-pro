@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '@/services/user';
+import { query as queryUsers, queryCurrent, changePassword } from '@/services/user';
 
 export default {
   namespace: 'user',
@@ -22,6 +22,10 @@ export default {
         type: 'saveCurrentUser',
         payload: response,
       });
+      if (callback) callback(response);
+    },
+    *passwordChange({ payload, callback }, { call }) {
+      const response = yield call(changePassword, payload);
       if (callback) callback(response);
     },
   },

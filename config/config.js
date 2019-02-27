@@ -109,6 +109,6 @@ export default {
   },
   hash: true,
   chainWebpack: webpackPlugin,
-  // base:'OSMS',
+  base: 'OSMS',
   // publicPath:'/',
 };

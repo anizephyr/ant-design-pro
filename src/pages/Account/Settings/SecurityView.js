@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import md5 from 'md5';
 import { connect } from 'dva';
-import { Form, Input, /** Upload, Select, */ Button, Icon } from 'antd';
+import { Form, Input, /** Upload, Select, */ Button, Icon, message } from 'antd';
 import { formatMessage, FormattedMessage } from 'umi/locale';
+import { getToken } from '@/utils/authority';
+
 import styles from './BaseView.less';
 // import { getTimeDistance } from '@/utils/utils';
 const FormItem = Form.Item;
@@ -17,10 +20,29 @@ class SecurityView extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const { newPasswordConfirm, newPassword, oldPassword } = values;
+        const params = {
+          newPasswordConfirm: md5(newPasswordConfirm),
+          newPassword: md5(newPassword),
+          oldPassword: md5(oldPassword),
+        };
+        dispatch({
+          type: 'user/passwordChange',
+          payload: {
+            changeData: params,
+            token: getToken(),
+          },
+          callback: resp => {
+            if (!resp.status) {
+              message.error(resp.msg);
+            } else {
+              message.success(resp.msg);
+            }
+          },
+        });
       }
     });
   };
