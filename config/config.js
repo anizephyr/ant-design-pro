@@ -72,7 +72,7 @@ export default {
   },
   proxy: {
     '/DAP/yyrygl/': {
-      target: 'http://127.0.0.1:8080/',
+      target: 'http://199.73.2.116:8080/',
       changeOrigin: true,
       // pathRewrite: { '/server/api/': '' },
     },
@@ -108,7 +108,8 @@ export default {
     basePath: '/',
   },
   hash: true,
+  history: 'hash',
   chainWebpack: webpackPlugin,
-  base: 'OSMS',
-  // publicPath:'/',
+  base: '/OSMS/',
+  publicPath: '/OSMS/',
 };

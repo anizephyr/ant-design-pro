@@ -27,7 +27,7 @@ export default {
         let { redirect } = params;
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
+          if (redirectUrlParams.hash === '' && redirectUrlParams.origin === urlParams.origin) {
             redirect = redirect
               .substr(urlParams.origin.length)
               .substr(urlParams.pathname.replace('/user/login', '').length);
@@ -39,6 +39,7 @@ export default {
             return;
           }
         }
+
         yield put(routerRedux.replace(redirect || '/'));
       }
       if (callback) callback(response);
