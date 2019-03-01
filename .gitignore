@@ -36,3 +36,4 @@ functions/mock
 # screenshot
 screenshot
 .firebase
+src/pages/data-set.min.js
