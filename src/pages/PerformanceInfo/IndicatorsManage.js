@@ -11,7 +11,6 @@ import {
   Button,
   Dropdown,
   Menu,
-  /* InputNumber, */
   Modal,
   message,
   InputNumber,
@@ -94,15 +93,7 @@ const CreateForm = Form.create()(props => {
           <FormItem label="权重">
             {getFieldDecorator('QZ', {
               rules: [{ required: true, message: '不能为空！' }],
-            })(
-              <InputNumber
-                min={0}
-                max={1}
-                step={0.1}
-                placeholder="请输入权重"
-                style={{ width: '100%' }}
-              />
-            )}
+            })(<InputNumber min={0} max={1} step={0.1} placeholder="请输入权重" />)}
           </FormItem>
         </Col>
       </Row>
