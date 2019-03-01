@@ -904,6 +904,11 @@ class BasicInfoManage extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="现岗位">
+              {getFieldDecorator('XGW')(<Input placeholder="请输入岗位" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

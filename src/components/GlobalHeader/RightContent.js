@@ -106,7 +106,11 @@ export default class GlobalHeaderRight extends PureComponent {
               <Avatar
                 size="small"
                 className={styles.avatar}
-                style={{ backgroundColor: '#87d068' }}
+                style={
+                  currentUser.XB === '男'
+                    ? { backgroundColor: '#87d068' }
+                    : { backgroundColor: '#ff4d4f' }
+                }
                 icon="user"
                 alt="avatar"
               />
