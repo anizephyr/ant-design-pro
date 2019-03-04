@@ -14,6 +14,7 @@ import {
   Menu,
   /* InputNumber, */
   DatePicker,
+  Drawer,
   Modal,
   message,
   Badge,
@@ -48,13 +49,12 @@ const CreateForm = Form.create()(props => {
   const { getFieldDecorator } = form;
 
   return (
-    <Modal
+    <Drawer
       width={700}
       destroyOnClose
       title="人员录入"
       visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onClose={() => handleModalVisible()}
     >
       <Row gutter={16}>
         <Col span={8}>
@@ -253,7 +253,14 @@ const CreateForm = Form.create()(props => {
           </FormItem>
         </Col>
       </Row>
-    </Modal>
+      <Divider type="horizontal" />
+      <Button onClick={() => handleModalVisible()} style={{ marginRight: 8 }}>
+        取消
+      </Button>
+      <Button onClick={okHandle} type="primary">
+        确定
+      </Button>
+    </Drawer>
   );
 });
 

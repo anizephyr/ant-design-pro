@@ -11,9 +11,10 @@ import {
   Button,
   Dropdown,
   Menu,
-  Modal,
+  Drawer,
   message,
   InputNumber,
+  Divider,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -40,16 +41,15 @@ const CreateForm = Form.create()(props => {
   const { getFieldDecorator } = form;
 
   return (
-    <Modal
-      width={700}
+    <Drawer
+      width={500}
       destroyOnClose
       title="新建考核指标"
       visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onClose={() => handleModalVisible()}
     >
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="分类">
             {getFieldDecorator('FL', {
               rules: [{ required: true, message: '请选择分类！' }],
@@ -61,39 +61,41 @@ const CreateForm = Form.create()(props => {
             )}
           </FormItem>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="考核项目">
             {getFieldDecorator('KHXM', {
               rules: [{ required: true, message: '不能为空！' }],
             })(<Input placeholder="请输入考核项目" />)}
           </FormItem>
         </Col>
-        <Col span={8}>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
           <FormItem label="考核指标">
             {getFieldDecorator('KHZB', {
               rules: [{ required: true, message: '不能为空！' }],
             })(<Input placeholder="请输入考核指标" />)}
           </FormItem>
         </Col>
-      </Row>
-      <Row gutter={16}>
         <Col span={12}>
-          <FormItem label="考核内容描述">
-            {getFieldDecorator('KHNR')(<TextArea row={2} placeholder="请输入考核内容" />)}
-          </FormItem>
-        </Col>
-        <Col span={12}>
-          <FormItem label="计分规则">
-            {getFieldDecorator('JFGZ')(<TextArea row={2} placeholder="请输入计分规则" />)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={6}>
           <FormItem label="权重">
             {getFieldDecorator('QZ', {
               rules: [{ required: true, message: '不能为空！' }],
             })(<InputNumber min={0} max={1} step={0.1} placeholder="请输入权重" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <FormItem label="考核内容描述">
+            {getFieldDecorator('KHNR')(<TextArea row={2} placeholder="请输入考核内容" />)}
+          </FormItem>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <FormItem label="计分规则">
+            {getFieldDecorator('JFGZ')(<TextArea row={2} placeholder="请输入计分规则" />)}
           </FormItem>
         </Col>
       </Row>
@@ -104,7 +106,14 @@ const CreateForm = Form.create()(props => {
           </FormItem>
         </Col>
       </Row>
-    </Modal>
+      <Divider type="horizontal" />
+      <Button onClick={() => handleModalVisible()} style={{ marginRight: 8 }}>
+        取消
+      </Button>
+      <Button onClick={okHandle} type="primary">
+        确定
+      </Button>
+    </Drawer>
   );
 });
 

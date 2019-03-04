@@ -9,10 +9,11 @@ import {
   Form,
   Input,
   Button,
-  /* InputNumber, */
+  Divider,
+  InputNumber,
   message,
   DatePicker,
-  Modal,
+  Drawer,
   Upload,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
@@ -42,16 +43,15 @@ const CreateForm = Form.create()(props => {
   const { getFieldDecorator } = form;
 
   return (
-    <Modal
-      width={700}
+    <Drawer
+      width={500}
       destroyOnClose
       title="积分信息录入"
       visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onClose={() => handleModalVisible()}
     >
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="机构名称">
             {getFieldDecorator('JGMC', {
               rules: [
@@ -61,7 +61,7 @@ const CreateForm = Form.create()(props => {
             })(<Input placeholder="请输入机构名称" />)}
           </FormItem>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="机构代码">
             {getFieldDecorator('JGDM', {
               rules: [{ required: true, message: '机构代码不能为空！' }],
@@ -70,14 +70,14 @@ const CreateForm = Form.create()(props => {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="姓名">
             {getFieldDecorator('RYMC', {
               rules: [{ required: true, message: '姓名不能为空！' }],
             })(<Input placeholder="请输入姓名" />)}
           </FormItem>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="十位工号">
             {getFieldDecorator('RYDM', {
               rules: [{ required: true, message: '十位工号错误！', len: 10 }],
@@ -86,14 +86,14 @@ const CreateForm = Form.create()(props => {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="岗位">
             {getFieldDecorator('GW', {
               rules: [{ required: true, message: '岗位不能为空！' }],
             })(<Input placeholder="请输入岗位" />)}
           </FormItem>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="考试项目">
             {getFieldDecorator('XMMC', {
               rules: [{ required: true, message: '项目名称不能为空！' }],
@@ -102,23 +102,23 @@ const CreateForm = Form.create()(props => {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="得分">
             {getFieldDecorator('DF', {
               rules: [{ required: true, message: '输入不能为空！' }],
-            })(<Input placeholder="请输入得分" />)}
+            })(<InputNumber placeholder="请输入得分" />)}
           </FormItem>
         </Col>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="积分">
             {getFieldDecorator('JF', {
               rules: [{ required: true, message: '输入不能为空！' }],
-            })(<Input placeholder="请输入积分" />)}
+            })(<InputNumber placeholder="请输入积分" />)}
           </FormItem>
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={12}>
           <FormItem label="考试时间">
             {getFieldDecorator('KSSJ', {
               rules: [{ required: true, message: '选项不能为空！' }],
@@ -131,7 +131,14 @@ const CreateForm = Form.create()(props => {
       <FormItem label="备注">
         {getFieldDecorator('BZ')(<TextArea row={2} placeholder="请输入备注" />)}
       </FormItem>
-    </Modal>
+      <Divider type="horizontal" />
+      <Button onClick={() => handleModalVisible()} style={{ marginRight: 8 }}>
+        取消
+      </Button>
+      <Button onClick={okHandle} type="primary">
+        确定
+      </Button>
+    </Drawer>
   );
 });
 @connect(({ markhislist, loading }) => ({
