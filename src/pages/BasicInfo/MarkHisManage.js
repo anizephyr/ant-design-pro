@@ -15,6 +15,7 @@ import {
   DatePicker,
   Drawer,
   Upload,
+  Popconfirm,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -486,7 +487,14 @@ class MarkHisManage extends PureComponent {
         fixed: 'right',
         render: (text, data) => (
           <Fragment>
-            <a onClick={() => this.handleSingleDelete(data)}>删除</a>
+            <Popconfirm
+              title="确认删除？"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => this.handleSingleDelete(data)}
+            >
+              <a href="#">删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },

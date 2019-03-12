@@ -12,7 +12,6 @@ import {
   Button,
   Dropdown,
   Menu,
-  /* InputNumber, */
   DatePicker,
   Drawer,
   Modal,
@@ -20,6 +19,7 @@ import {
   Badge,
   Divider,
   Steps,
+  Popconfirm,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -1095,7 +1095,14 @@ class BasicInfoManage extends PureComponent {
           <Fragment>
             <a onClick={() => this.handleUpdateModalVisible(true, record)}>变更</a>
             <Divider type="vertical" />
-            <a onClick={() => this.handleSingleDelete(record)}>删除</a>
+            <Popconfirm
+              title="确认删除？"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => this.handleSingleDelete(record)}
+            >
+              <a href="#">删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },

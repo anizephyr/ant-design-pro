@@ -15,6 +15,7 @@ import {
   message,
   InputNumber,
   Divider,
+  Popconfirm,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -447,7 +448,14 @@ class IndicatorsManage extends PureComponent {
         fixed: 'right',
         render: (text, record) => (
           <Fragment>
-            <a onClick={() => this.handleSingleDelete(record)}>删除</a>
+            <Popconfirm
+              title="确认删除？"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={() => this.handleSingleDelete(record)}
+            >
+              <a href="#">删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },
