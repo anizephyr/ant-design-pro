@@ -414,16 +414,19 @@ class IndicatorsManage extends PureComponent {
       {
         title: '考核项目',
         dataIndex: 'KHXM',
+        fixed: 'left',
         width: 150,
       },
       {
         title: '考核指标',
         dataIndex: 'KHZB',
+        fixed: 'left',
         width: 150,
       },
       {
         title: '权重',
         dataIndex: 'QZ',
+        fixed: 'left',
         width: 100,
       },
       {
