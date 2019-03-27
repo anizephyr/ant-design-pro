@@ -1,4 +1,8 @@
-import { queryRelationship, matchRelationship } from '@/services/performanceinfo';
+import {
+  queryRelationship,
+  matchRelationship,
+  checkRelationship,
+} from '@/services/performanceinfo';
 
 export default {
   namespace: 'relationshiplist',
@@ -24,6 +28,14 @@ export default {
     },
     *fetchright({ payload, callback }, { call, put }) {
       const response = yield call(queryRelationship, payload);
+      yield put({
+        type: 'saveright',
+        payload: response,
+      });
+      if (callback) callback(response);
+    },
+    *checkright({ payload, callback }, { call, put }) {
+      const response = yield call(checkRelationship, payload);
       yield put({
         type: 'saveright',
         payload: response,

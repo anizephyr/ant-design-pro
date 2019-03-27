@@ -43,6 +43,16 @@ export async function queryRelationship(params) {
   });
 }
 
+export async function checkRelationship(params) {
+  return request(`${apiPath}relationshipHandler`, {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'check',
+    },
+  });
+}
+
 export async function matchRelationship(params) {
   return request(`${apiPath}relationshipHandler`, {
     method: 'POST',

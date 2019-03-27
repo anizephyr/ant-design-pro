@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Form, Button, message } from 'antd';
+import { Table, Row, Col, Card, Form, Button, message, Alert } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { getToken } from '@/utils/authority';
 import styles from './Relationship.less';
@@ -100,6 +100,14 @@ class Relationship extends PureComponent {
     this.setState({ selectedRowKeysRight: selectedRowKeys, selectedRowsRight: selectedRows });
   };
 
+  cleanSelectedKeysLeft = () => {
+    this.handleRowSelectChangeLeft([], []);
+  };
+
+  cleanSelectedKeysRight = () => {
+    this.handleRowSelectChangeRight([], []);
+  };
+
   handleStandardTableChangeLeft = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -130,26 +138,39 @@ class Relationship extends PureComponent {
     });
   };
 
-  handleClickRowLeft = row => {
-    return {
-      onClick: () => {
-        this.handleSelectRowsLeft([row]);
+  handleClickRowLeft = row => ({
+    onClick: () => {
+      this.handleSelectRowsLeft(row);
+    },
+  });
+
+  handleSelectRowsLeft = row => {
+    console.log(row);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'relationshiplist/checkright',
+      payload: {
+        side: 'right',
+        checkData: { GW: row.GW },
+        token: getToken(),
       },
-    };
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        } else {
+          this.setState({
+            selectedRowsRight: resp.selectedRows,
+            selectedRowKeysRight: resp.selectedRows.map(r => r.KHZBDM),
+          });
+          message.success(resp.msg);
+        }
+      },
+    });
   };
 
-  selectRhandleSelectRowsLeftowLeft = record => {
-    const { selectedRowKeysLeft } = this.state;
-    const selectedRowKeys = [...selectedRowKeysLeft];
-    if (selectedRowKeys.indexOf(record.key) >= 0) {
-      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
-    } else {
-      selectedRowKeys.push(record.key);
-    }
-    this.setState({ selectedRowKeysLeft });
+  handleBtnClick = () => {
+    message.success('ok');
   };
-
-  handleBtnClick = () => {};
 
   render() {
     const {
@@ -159,15 +180,15 @@ class Relationship extends PureComponent {
     const { list: listLeft, pagination: paginationLeft } = dataLeft;
     const { list: listRight, pagination: paginationRight } = dataRight;
     const paginationPropsLeft = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSizeOptions: ['20', '50', '100'],
+      showSizeChanger: false,
+      showQuickJumper: false,
+      pageSizeOptions: ['10', '50', '100'],
       ...paginationLeft,
     };
     const paginationPropsRight = {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      pageSizeOptions: ['20', '50', '100'],
+      showSizeChanger: false,
+      showQuickJumper: false,
+      pageSizeOptions: ['10', '50', '100'],
       ...paginationRight,
     };
     const { sortedObjRight } = this.state;
@@ -177,7 +198,6 @@ class Relationship extends PureComponent {
       selectedRowsLeft,
       selectedRowsRight,
     } = this.state;
-    console.log(selectedRowKeysLeft, selectedRowsLeft);
     const rowSelectionLeft = {
       selectedRowKeys: selectedRowKeysLeft,
       selectedRows: selectedRowsLeft,
@@ -253,6 +273,21 @@ class Relationship extends PureComponent {
             </div>
             <Row gutter={16}>
               <Col span={6}>
+                <div className={styles.tableAlert}>
+                  <Alert
+                    message={
+                      <Fragment>
+                        已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeysLeft.length}</a>{' '}
+                        项&nbsp;&nbsp;
+                        <a onClick={this.cleanSelectedKeysLeft} style={{ marginLeft: 24 }}>
+                          清空
+                        </a>
+                      </Fragment>
+                    }
+                    type="info"
+                    showIcon
+                  />
+                </div>
                 <Table
                   rowKey="GW"
                   rowSelection={rowSelectionLeft}
@@ -263,9 +298,25 @@ class Relationship extends PureComponent {
                   columns={columnsLeft}
                   onChange={this.handleStandardTableChangeLeft}
                   onRow={this.handleClickRowLeft}
+                  size="small"
                 />
               </Col>
               <Col span={18}>
+                <div className={styles.tableAlert}>
+                  <Alert
+                    message={
+                      <Fragment>
+                        已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeysRight.length}</a>{' '}
+                        项&nbsp;&nbsp;
+                        <a onClick={this.cleanSelectedKeysRight} style={{ marginLeft: 24 }}>
+                          清空
+                        </a>
+                      </Fragment>
+                    }
+                    type="info"
+                    showIcon
+                  />
+                </div>
                 <Table
                   rowKey="KHZBDM"
                   rowSelection={rowSelectionRight}
@@ -275,6 +326,7 @@ class Relationship extends PureComponent {
                   pagination={paginationPropsRight}
                   columns={columnsRight}
                   onChange={this.handleStandardTableChangeRight}
+                  size="small"
                 />
               </Col>
             </Row>
