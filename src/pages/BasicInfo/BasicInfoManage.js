@@ -958,7 +958,6 @@ class BasicInfoManage extends PureComponent {
         dataIndex: 'JGMC',
         sorter: true,
         sortOrder: sortedObj.columnKey === 'JGMC' && sortedObj.order,
-        fixed: 'left',
         width: 150,
       },
       {
@@ -966,7 +965,6 @@ class BasicInfoManage extends PureComponent {
         dataIndex: 'RYMC',
         sorter: true,
         sortOrder: sortedObj.columnKey === 'RYMC' && sortedObj.order,
-        fixed: 'left',
         width: 125,
       },
       {
@@ -974,7 +972,7 @@ class BasicInfoManage extends PureComponent {
         dataIndex: 'JGDM',
         sorter: true,
         sortOrder: sortedObj.columnKey === 'JGDM' && sortedObj.order,
-        width: 150,
+        width: 120,
       },
       {
         title: '人员代码',
@@ -987,12 +985,12 @@ class BasicInfoManage extends PureComponent {
       {
         title: '性别',
         dataIndex: 'XB',
-        width: 100,
+        width: 60,
       },
       {
         title: '身份证号码',
         dataIndex: 'SFZH',
-        width: 150,
+        width: 160,
       },
       {
         title: '联系电话',
@@ -1002,7 +1000,7 @@ class BasicInfoManage extends PureComponent {
       {
         title: '员工类型',
         dataIndex: 'YGLX',
-        width: 150,
+        width: 100,
       },
       {
         title: '金融工作从业时间',
@@ -1011,7 +1009,7 @@ class BasicInfoManage extends PureComponent {
         render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
       },
       {
-        title: '本行运营岗位上岗时间',
+        title: '运营岗位上岗时间',
         dataIndex: 'YYGWSGSJ',
         width: 150,
         render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
@@ -1025,7 +1023,7 @@ class BasicInfoManage extends PureComponent {
       {
         title: '现岗位',
         dataIndex: 'XGW',
-        width: 150,
+        width: 200,
       },
       {
         title: '现岗位上岗时间',
@@ -1036,32 +1034,32 @@ class BasicInfoManage extends PureComponent {
       {
         title: '第一学历',
         dataIndex: 'DYXL',
-        width: 150,
+        width: 100,
       },
       {
         title: '最高学历',
         dataIndex: 'ZGXL',
-        width: 150,
+        width: 100,
       },
       {
         title: '是否全日制',
         dataIndex: 'SFQRZ',
-        width: 150,
+        width: 110,
       },
       {
         title: '婚姻情况',
         dataIndex: 'HYQK',
-        width: 150,
+        width: 100,
       },
       {
         title: '生育情况',
         dataIndex: 'SYQK',
-        width: 150,
+        width: 100,
       },
       {
         title: '家庭住址',
         dataIndex: 'JTZZ',
-        width: 150,
+        width: 450,
       },
       {
         title: '人员分组',
@@ -1071,7 +1069,7 @@ class BasicInfoManage extends PureComponent {
       {
         title: '状态',
         dataIndex: 'ZT',
-        width: 150,
+        width: 100,
         filters: [
           {
             text: status[0],
@@ -1089,7 +1087,7 @@ class BasicInfoManage extends PureComponent {
       },
       {
         title: '操作',
-        width: 150,
+        width: 100,
         fixed: 'right',
         render: (text, record) => (
           <Fragment>
@@ -1137,7 +1135,7 @@ class BasicInfoManage extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 3170 }}
+              scroll={{ x: 3200 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -1145,6 +1143,8 @@ class BasicInfoManage extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               rowKey="RYDM"
+              size="small"
+              // bordered
             />
           </div>
         </Card>

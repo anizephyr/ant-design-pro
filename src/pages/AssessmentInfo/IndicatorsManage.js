@@ -408,36 +408,32 @@ class IndicatorsManage extends PureComponent {
         dataIndex: 'FL',
         sorter: true,
         sortOrder: sortedObj.columnKey === 'FL' && sortedObj.order,
-        fixed: 'left',
-        width: 100,
+        width: 80,
       },
       {
         title: '考核项目',
         dataIndex: 'KHXM',
-        fixed: 'left',
         width: 150,
       },
       {
         title: '考核指标',
         dataIndex: 'KHZB',
-        fixed: 'left',
-        width: 150,
+        width: 120,
       },
       {
         title: '权重',
         dataIndex: 'QZ',
-        fixed: 'left',
-        width: 100,
+        width: 80,
       },
       {
         title: '考核内容描述',
         dataIndex: 'KHNR',
-        width: 400,
+        width: 1000,
       },
       {
         title: '计分规则',
         dataIndex: 'JFGZ',
-        width: 1200,
+        width: 2400,
       },
 
       {
@@ -489,7 +485,7 @@ class IndicatorsManage extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 2650 }}
+              scroll={{ x: 4450 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -497,6 +493,7 @@ class IndicatorsManage extends PureComponent {
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
               rowKey="KHZBDM"
+              size="small"
             />
           </div>
         </Card>

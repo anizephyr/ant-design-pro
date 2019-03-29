@@ -63,12 +63,12 @@ class ModifyHisList extends PureComponent {
     {
       title: '员工类型',
       dataIndex: 'YGLX',
-      width: 150,
+      width: 120,
     },
     {
       title: '岗位',
       dataIndex: 'GW',
-      width: 150,
+      width: 200,
     },
     {
       title: '上岗时间',
@@ -239,16 +239,6 @@ class ModifyHisList extends PureComponent {
   expandedRowRender = record => {
     const columns = [
       {
-        title: '人员姓名',
-        dataIndex: 'RYMC',
-        width: 125,
-      },
-      {
-        title: '人员代码',
-        dataIndex: 'RYDM',
-        width: 125,
-      },
-      {
         title: '机构名称',
         dataIndex: 'JGMC',
         width: 150,
@@ -266,7 +256,7 @@ class ModifyHisList extends PureComponent {
       {
         title: '岗位',
         dataIndex: 'GW',
-        width: 150,
+        width: 200,
       },
       {
         title: '上岗时间',
@@ -419,6 +409,7 @@ class ModifyHisList extends PureComponent {
               expandRowByClick={expandRowByClick}
               expandedRowRender={this.expandedRowRender}
               rowKey="RYDM"
+              size="small"
             />
           </div>
         </Card>

@@ -179,7 +179,7 @@ class MarkHisManage extends PureComponent {
     {
       title: '现岗位',
       dataIndex: 'GW',
-      width: 150,
+      width: 200,
     },
     {
       title: '总积分',
@@ -600,6 +600,7 @@ class MarkHisManage extends PureComponent {
               expandRowByClick={expandRowByClick}
               expandedRowRender={this.expandedRowRender}
               rowKey="RYDM"
+              size="small"
             />
           </div>
         </Card>

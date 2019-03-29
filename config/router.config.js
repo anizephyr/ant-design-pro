@@ -68,31 +68,31 @@ export default [
       },
       //考核信息:1.考核指标明细维护 2.岗位与考核指标关系维护 3.人员考核信息 4.机构考核信息
       {
-        path: '/performanceinfo',
-        name: 'performanceinfo',
+        path: '/assessmentinfo',
+        name: 'assessmentinfo',
         icon: 'check-circle-o',
         routes: [
           {
-            path: '/performanceinfo/indicatorsmanage',
+            path: '/assessmentinfo/indicatorsmanage',
             name: 'indicatorsmanage',
-            component: './PerformanceInfo/IndicatorsManage',
+            component: './AssessmentInfo/IndicatorsManage',
             authority: ['creator', 'admin'],
           },
           {
-            path: '/performanceinfo/relationship',
+            path: '/assessmentinfo/relationship',
             name: 'relationship',
-            component: './PerformanceInfo/Relationship',
+            component: './AssessmentInfo/Relationship',
             authority: ['creator', 'admin'],
           },
           {
-            path: '/performanceinfo/staffperformance',
-            name: 'staffperformance',
-            component: './PerformanceInfo/StaffPerformance',
+            path: '/assessmentinfo/staffassessment',
+            name: 'staffassessment',
+            component: './AssessmentInfo/StaffAssessment',
           },
           {
-            path: '/performanceinfo/orgperformance',
-            name: 'orgperformance',
-            component: './PerformanceInfo/OrgPerformance',
+            path: '/assessmentinfo/orgassessment',
+            name: 'orgassessment',
+            component: './AssessmentInfo/OrgAssessment',
           },
         ],
       },

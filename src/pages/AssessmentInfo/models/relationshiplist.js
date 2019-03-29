@@ -1,8 +1,4 @@
-import {
-  queryRelationship,
-  matchRelationship,
-  checkRelationship,
-} from '@/services/performanceinfo';
+import { queryRelationship, matchRelationship, checkRelationship } from '@/services/assessmentinfo';
 
 export default {
   namespace: 'relationshiplist',

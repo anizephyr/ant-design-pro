@@ -140,18 +140,18 @@ class Relationship extends PureComponent {
 
   handleClickRowLeft = row => ({
     onClick: () => {
-      this.handleSelectRowsLeft(row);
+      this.handleRowClickLeft(row);
     },
   });
 
-  handleSelectRowsLeft = row => {
-    console.log(row);
+  handleRowClickLeft = row => {
+    this.setState({ clickedRowsLeft: { GW: row.GW } });
     const { dispatch } = this.props;
     dispatch({
       type: 'relationshiplist/checkright',
       payload: {
         side: 'right',
-        checkData: { GW: row.GW },
+        selectData: { GW: row.GW },
         token: getToken(),
       },
       callback: resp => {
@@ -162,14 +162,29 @@ class Relationship extends PureComponent {
             selectedRowsRight: resp.selectedRows,
             selectedRowKeysRight: resp.selectedRows.map(r => r.KHZBDM),
           });
-          message.success(resp.msg);
         }
       },
     });
   };
 
   handleBtnClick = () => {
-    message.success('ok');
+    const { selectedRowKeysLeft, selectedRowKeysRight } = this.state;
+    const { dispatch } = this.props;
+    if (selectedRowKeysLeft.length <= 0) return;
+    dispatch({
+      type: 'relationshiplist/match',
+      payload: {
+        matchData: { left: selectedRowKeysLeft, right: selectedRowKeysRight },
+        token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        } else {
+          message.success(resp.msg);
+        }
+      },
+    });
   };
 
   render() {
@@ -228,7 +243,6 @@ class Relationship extends PureComponent {
         dataIndex: 'KHXM',
         // sorter: true,
         sortOrder: sortedObjRight.columnKey === 'KHXM' && sortedObjRight.order,
-        fixed: 'left',
         width: 150,
       },
       {
@@ -236,24 +250,22 @@ class Relationship extends PureComponent {
         dataIndex: 'KHZB',
         // sorter: true,
         sortOrder: sortedObjRight.columnKey === 'KHZB' && sortedObjRight.order,
-        fixed: 'left',
-        width: 150,
+        width: 120,
       },
       {
         title: '权重',
         dataIndex: 'QZ',
-        fixed: 'left',
-        width: 100,
+        width: 80,
       },
       {
         title: '考核内容描述',
         dataIndex: 'KHNR',
-        width: 400,
+        width: 1000,
       },
       {
         title: '计分规则',
         dataIndex: 'JFGZ',
-        width: 1200,
+        width: 2400,
       },
 
       {
@@ -320,7 +332,7 @@ class Relationship extends PureComponent {
                 <Table
                   rowKey="KHZBDM"
                   rowSelection={rowSelectionRight}
-                  scroll={{ x: 2400 }}
+                  scroll={{ x: 4200 }}
                   loading={loading}
                   dataSource={listRight}
                   pagination={paginationPropsRight}

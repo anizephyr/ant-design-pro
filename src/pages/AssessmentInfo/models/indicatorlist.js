@@ -2,7 +2,7 @@ import {
   queryIndicatorList,
   addIndicatorList,
   removeIndicatorList,
-} from '@/services/performanceinfo';
+} from '@/services/assessmentinfo';
 
 export default {
   namespace: 'indicatorlist',
