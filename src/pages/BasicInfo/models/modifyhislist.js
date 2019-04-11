@@ -1,4 +1,4 @@
-import { queryModifyHisList, exportModifyHisList } from '@/services/modifyhis';
+import { queryModifyHisList, exportModifyHisList } from '@/services/basicinfo';
 
 export default {
   namespace: 'modifyhislist',

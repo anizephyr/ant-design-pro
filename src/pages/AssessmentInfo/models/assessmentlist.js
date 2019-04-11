@@ -1,40 +1,51 @@
 import {
-  queryMarkHisList,
-  removeMarkHisList,
-  addMarkHisList,
+  queryOrgAssessment,
+  removeOrgAssessment,
+  addOrgAssessment,
   exportMarkHisList,
   downloadTemplate,
-} from '@/services/basicinfo';
+  queryOrgIndicators,
+} from '@/services/assessmentinfo';
 
 export default {
-  namespace: 'markhislist',
+  namespace: 'assessmentlist',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
+    orgIndicators: {},
+    staffIndicators: {},
   },
 
   effects: {
-    *fetch({ payload, callback }, { call, put }) {
-      const response = yield call(queryMarkHisList, payload);
+    *fetchOrg({ payload, callback }, { call, put }) {
+      const response = yield call(queryOrgAssessment, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback(response);
     },
-    *add({ payload, callback }, { call, put }) {
-      const response = yield call(addMarkHisList, payload);
+    *fetchOrgIndicators({ payload, callback }, { call, put }) {
+      const response = yield call(queryOrgIndicators, payload);
+      yield put({
+        type: 'saveOrgIndicators',
+        payload: response,
+      });
+      if (callback) callback(response);
+    },
+    *addOrg({ payload, callback }, { call, put }) {
+      const response = yield call(addOrgAssessment, payload);
       yield put({
         type: 'save',
         payload: response,
       });
       if (callback) callback(response);
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeMarkHisList, payload);
+    *removeOrg({ payload, callback }, { call, put }) {
+      const response = yield call(removeOrgAssessment, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -56,6 +67,12 @@ export default {
       return {
         ...state,
         data: action.payload,
+      };
+    },
+    saveOrgIndicators(state, action) {
+      return {
+        ...state,
+        orgIndicators: action.payload,
       };
     },
   },

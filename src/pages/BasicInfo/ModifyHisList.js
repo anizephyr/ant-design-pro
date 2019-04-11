@@ -99,21 +99,21 @@ class ModifyHisList extends PureComponent {
     },
   ];
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'modifyhislist/fetch',
-      payload: {
-        selectData: {},
-        token: getToken(),
-      },
-      callback: resp => {
-        if (!resp.status) {
-          message.error(resp.msg);
-        }
-      },
-    });
-  }
+  // componentDidMount() {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'modifyhislist/fetch',
+  //     payload: {
+  //       selectData: {},
+  //       token: getToken(),
+  //     },
+  //     callback: resp => {
+  //       if (!resp.status) {
+  //         message.error(resp.msg);
+  //       }
+  //     },
+  //   });
+  // }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;

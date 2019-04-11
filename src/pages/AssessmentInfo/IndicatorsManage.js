@@ -78,11 +78,34 @@ const CreateForm = Form.create()(props => {
             })(<Input placeholder="请输入考核指标" />)}
           </FormItem>
         </Col>
-        <Col span={12}>
+        <Col span={6}>
           <FormItem label="权重">
             {getFieldDecorator('QZ', {
               rules: [{ required: true, message: '不能为空！' }],
-            })(<InputNumber min={0} max={1} step={0.1} placeholder="请输入权重" />)}
+            })(
+              <InputNumber
+                min={0}
+                max={1}
+                step={0.1}
+                placeholder="请输入权重"
+                style={{ width: '100%' }}
+              />
+            )}
+          </FormItem>
+        </Col>
+        <Col span={6}>
+          <FormItem label="展现顺序">
+            {getFieldDecorator('ZXSX', {
+              initialValue: 0,
+              rules: [{ required: true, message: '不能为空！' }],
+            })(
+              <InputNumber
+                min={0}
+                step={1}
+                placeholder="请输入数字序号"
+                style={{ width: '100%' }}
+              />
+            )}
           </FormItem>
         </Col>
       </Row>
@@ -332,6 +355,7 @@ class IndicatorsManage extends PureComponent {
         selectData: params,
         addData: {
           FL: fields.FL,
+          ZXSX: fields.ZXSX,
           KHXM: fields.KHXM,
           KHZB: fields.KHZB,
           KHNR: fields.KHNR,
@@ -410,6 +434,14 @@ class IndicatorsManage extends PureComponent {
         sortOrder: sortedObj.columnKey === 'FL' && sortedObj.order,
         width: 80,
       },
+
+      {
+        title: '展现',
+        dataIndex: 'ZXSX',
+        sorter: true,
+        sortOrder: sortedObj.columnKey === 'ZXSX' && sortedObj.order,
+        width: 80,
+      },
       {
         title: '考核项目',
         dataIndex: 'KHXM',
@@ -420,11 +452,11 @@ class IndicatorsManage extends PureComponent {
         dataIndex: 'KHZB',
         width: 120,
       },
-      {
-        title: '权重',
-        dataIndex: 'QZ',
-        width: 80,
-      },
+      // {
+      //   title: '指标代码',
+      //   dataIndex: 'KHZBDM',
+      //   width: 100,
+      // },
       {
         title: '考核内容描述',
         dataIndex: 'KHNR',
@@ -435,7 +467,11 @@ class IndicatorsManage extends PureComponent {
         dataIndex: 'JFGZ',
         width: 2400,
       },
-
+      {
+        title: '权重',
+        dataIndex: 'QZ',
+        width: 80,
+      },
       {
         title: '备注',
         dataIndex: 'BZ',
@@ -443,7 +479,7 @@ class IndicatorsManage extends PureComponent {
       },
       {
         title: '操作',
-        width: 150,
+        width: 100,
         fixed: 'right',
         render: (text, record) => (
           <Fragment>
@@ -485,7 +521,7 @@ class IndicatorsManage extends PureComponent {
               )}
             </div>
             <StandardTable
-              scroll={{ x: 4450 }}
+              scroll={{ x: 4410 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

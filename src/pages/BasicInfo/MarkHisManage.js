@@ -104,10 +104,12 @@ const CreateForm = Form.create()(props => {
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <FormItem label="得分">
-            {getFieldDecorator('DF', {
-              rules: [{ required: true, message: '输入不能为空！' }],
-            })(<InputNumber placeholder="请输入得分" />)}
+          <FormItem label="考试时间">
+            {getFieldDecorator('KSSJ', {
+              rules: [{ required: true, message: '选项不能为空！' }],
+            })(
+              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试时间" />
+            )}
           </FormItem>
         </Col>
         <Col span={12}>
@@ -115,17 +117,6 @@ const CreateForm = Form.create()(props => {
             {getFieldDecorator('JF', {
               rules: [{ required: true, message: '输入不能为空！' }],
             })(<InputNumber placeholder="请输入积分" />)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="考试时间">
-            {getFieldDecorator('KSSJ', {
-              rules: [{ required: true, message: '选项不能为空！' }],
-            })(
-              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试时间" />
-            )}
           </FormItem>
         </Col>
       </Row>
@@ -406,7 +397,7 @@ class MarkHisManage extends PureComponent {
           RYDM: fields.RYDM,
           GW: fields.GW,
           XMMC: fields.XMMC,
-          DF: fields.DF,
+          DF: 0,
           JF: fields.JF,
           KSSJ: moment(fields.KSSJ).format('YYYY-MM-DD'),
           BZ: fields.BZ == null ? '' : fields.BZ,
@@ -454,11 +445,6 @@ class MarkHisManage extends PureComponent {
         title: '考试项目',
         dataIndex: 'XMMC',
         width: 125,
-      },
-      {
-        title: '得分',
-        dataIndex: 'DF',
-        width: 100,
       },
       {
         title: '积分',
@@ -560,7 +546,7 @@ class MarkHisManage extends PureComponent {
     const uploadProps = {
       name: 'import_markhis',
       accept: '.xlsx',
-      action: '/server/api/uploadHandler',
+      action: '/DAP/yyrygl/uploadHandler',
       showUploadList: true,
       headers: {
         Authorization: getToken(),
