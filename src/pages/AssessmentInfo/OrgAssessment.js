@@ -33,7 +33,7 @@ const getValue = obj =>
 
 /* eslint react/no-multi-comp:0 */
 const CreateForm = Form.create()(props => {
-  const { modalVisible, form, handleAdd, handleModalVisible, orgIndicators } = props;
+  const { modalVisible, form, handleAdd, handleModalVisible, indicators } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -42,7 +42,7 @@ const CreateForm = Form.create()(props => {
     });
   };
   const { getFieldDecorator } = form;
-  const { list } = orgIndicators;
+  const { list } = indicators;
   const generateCreateFormBody =
     list === undefined
       ? {}
@@ -130,9 +130,9 @@ const CreateForm = Form.create()(props => {
     </Drawer>
   );
 });
-@connect(({ assessmentlist, loading }) => ({
-  assessmentlist,
-  loading: loading.models.assessmentlist,
+@connect(({ orgAssessmentList, loading }) => ({
+  orgAssessmentList,
+  loading: loading.models.orgAssessmentList,
 }))
 @Form.create()
 class OrgAssessment extends PureComponent {
@@ -147,23 +147,28 @@ class OrgAssessment extends PureComponent {
     {
       title: '考核时段',
       dataIndex: 'KHSD',
-      width: 280,
+      width: 150,
     },
     {
       title: '机构名称',
       dataIndex: 'JGMC',
-      width: 300,
+      width: 200,
     },
     {
       title: '机构代码',
       dataIndex: 'JGDM',
-      width: 220,
+      width: 200,
     },
     {
       title: '总分',
       dataIndex: 'ZF',
-      width: 400,
+      width: 100,
       // sorter:true,
+    },
+    {
+      title: '',
+      dataIndex: 'BZ',
+      width: 300,
     },
     {
       title: '操作',
@@ -187,7 +192,7 @@ class OrgAssessment extends PureComponent {
   componentWillMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'assessmentlist/fetchOrgIndicators',
+      type: 'orgAssessmentList/fetchIndicators',
       payload: {
         selectData: {},
         token: getToken(),
@@ -206,7 +211,7 @@ class OrgAssessment extends PureComponent {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       dispatch({
-        type: 'assessmentlist/fetchOrg',
+        type: 'orgAssessmentList/fetch',
         payload: {
           selectData: fieldsValue,
           token: getToken(),
@@ -240,7 +245,7 @@ class OrgAssessment extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     dispatch({
-      type: 'assessmentlist/fetchOrg',
+      type: 'orgAssessmentList/fetch',
       payload: {
         selectData: params,
         token: getToken(),
@@ -266,7 +271,7 @@ class OrgAssessment extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'assessmentlist/fetch',
+      type: 'orgAssessmentList/fetch',
       payload: {
         selectData: {},
         token: getToken(),
@@ -300,16 +305,16 @@ class OrgAssessment extends PureComponent {
     const { selectedRows, formValues } = this.state;
     if (selectedRows.length === 0) return;
     dispatch({
-      type: 'assessmentlist/export',
+      type: 'orgAssessmentList/export',
       payload: {
         selectData: formValues,
-        exportData: selectedRows.map(row => `'${row.RYDM}'`),
+        exportData: selectedRows.map(row => ({ KHSD: row.KHSD, JGDM: row.JGDM })),
         token: getToken(),
       },
       callback: blob => {
         const aLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const fileName = '积分查询结果导出.xlsx';
+        const fileName = '机构考核结果导出.xlsx';
         aLink.href = url;
         aLink.download = fileName;
         aLink.click();
@@ -320,14 +325,14 @@ class OrgAssessment extends PureComponent {
   handleDownloadTemplateClick = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'assessmentlist/template',
+      type: 'orgAssessmentList/template',
       payload: {
         token: getToken(),
       },
       callback: blob => {
         const aLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const fileName = '积分数据导入模版.xlsx';
+        const fileName = '机构考核数据导入模版.xlsx';
         aLink.href = url;
         aLink.download = fileName;
         aLink.click();
@@ -360,7 +365,7 @@ class OrgAssessment extends PureComponent {
       });
 
       dispatch({
-        type: 'assessmentlist/fetchOrg',
+        type: 'orgAssessmentList/fetch',
         payload: {
           selectData: params,
           token: getToken(),
@@ -383,7 +388,7 @@ class OrgAssessment extends PureComponent {
       ...filter,
     };
     dispatch({
-      type: 'assessmentlist/removeOrg',
+      type: 'orgAssessmentList/remove',
       payload: {
         selectData: params,
         deleteData: record.Children.map(child => child.ID),
@@ -409,7 +414,7 @@ class OrgAssessment extends PureComponent {
     };
 
     dispatch({
-      type: 'assessmentlist/addOrg',
+      type: 'orgAssessmentList/add',
       payload: {
         token: getToken(),
         selectData: params,
@@ -436,12 +441,17 @@ class OrgAssessment extends PureComponent {
       {
         title: '考核项目',
         dataIndex: 'KHXM',
-        width: 120,
+        width: 150,
       },
       {
         title: '考核指标',
         dataIndex: 'KHZB',
-        width: 120,
+        width: 190,
+      },
+      {
+        title: '考核内容',
+        dataIndex: 'KHNR',
+        width: 200,
       },
       {
         title: '得分',
@@ -449,19 +459,9 @@ class OrgAssessment extends PureComponent {
         width: 100,
       },
       {
-        title: '考核内容',
-        dataIndex: 'KHNR',
-        width: 440,
-      },
-      {
-        title: '权重',
-        dataIndex: 'QZ',
-        width: 100,
-      },
-      {
         title: '备注',
         dataIndex: 'BZ',
-        width: 250,
+        width: 400,
       },
     ];
 
@@ -523,7 +523,7 @@ class OrgAssessment extends PureComponent {
 
   render() {
     const {
-      assessmentlist: { data, orgIndicators },
+      orgAssessmentList: { data, indicators },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, expandRowByClick } = this.state;
@@ -532,7 +532,7 @@ class OrgAssessment extends PureComponent {
       handleModalVisible: this.handleModalVisible,
     };
     const uploadProps = {
-      name: 'import_staffAssessment',
+      name: 'import_orgAssessment',
       accept: '.xlsx',
       action: '/DAP/yyrygl/uploadHandler',
       showUploadList: true,
@@ -564,7 +564,6 @@ class OrgAssessment extends PureComponent {
               </Upload>
             </div>
             <StandardTable
-              scroll={{ x: 1200 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
@@ -578,7 +577,7 @@ class OrgAssessment extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} orgIndicators={orgIndicators} />
+        <CreateForm {...parentMethods} modalVisible={modalVisible} indicators={indicators} />
       </PageHeaderWrapper>
     );
   }

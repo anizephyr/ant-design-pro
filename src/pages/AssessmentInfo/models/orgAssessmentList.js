@@ -2,25 +2,24 @@ import {
   queryOrgAssessment,
   removeOrgAssessment,
   addOrgAssessment,
-  exportMarkHisList,
-  downloadTemplate,
+  exportOrgAssessment,
+  downloadOrgAssessmentTemplate,
   queryOrgIndicators,
 } from '@/services/assessmentinfo';
 
 export default {
-  namespace: 'assessmentlist',
+  namespace: 'orgAssessmentList',
 
   state: {
     data: {
       list: [],
       pagination: {},
     },
-    orgIndicators: {},
-    staffIndicators: {},
+    indicators: {},
   },
 
   effects: {
-    *fetchOrg({ payload, callback }, { call, put }) {
+    *fetch({ payload, callback }, { call, put }) {
       const response = yield call(queryOrgAssessment, payload);
       yield put({
         type: 'save',
@@ -28,7 +27,7 @@ export default {
       });
       if (callback) callback(response);
     },
-    *fetchOrgIndicators({ payload, callback }, { call, put }) {
+    *fetchIndicators({ payload, callback }, { call, put }) {
       const response = yield call(queryOrgIndicators, payload);
       yield put({
         type: 'saveOrgIndicators',
@@ -36,7 +35,7 @@ export default {
       });
       if (callback) callback(response);
     },
-    *addOrg({ payload, callback }, { call, put }) {
+    *add({ payload, callback }, { call, put }) {
       const response = yield call(addOrgAssessment, payload);
       yield put({
         type: 'save',
@@ -44,7 +43,7 @@ export default {
       });
       if (callback) callback(response);
     },
-    *removeOrg({ payload, callback }, { call, put }) {
+    *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeOrgAssessment, payload);
       yield put({
         type: 'save',
@@ -53,11 +52,11 @@ export default {
       if (callback) callback(response);
     },
     *export({ payload, callback }, { call }) {
-      const response = yield call(exportMarkHisList, payload);
+      const response = yield call(exportOrgAssessment, payload);
       if (callback) callback(response);
     },
     *template({ payload, callback }, { call }) {
-      const response = yield call(downloadTemplate, payload);
+      const response = yield call(downloadOrgAssessmentTemplate, payload);
       if (callback) callback(response);
     },
   },
@@ -72,7 +71,7 @@ export default {
     saveOrgIndicators(state, action) {
       return {
         ...state,
-        orgIndicators: action.payload,
+        indicators: action.payload,
       };
     },
   },

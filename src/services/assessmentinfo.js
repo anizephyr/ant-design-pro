@@ -105,3 +105,31 @@ export async function removeOrgAssessment(params) {
     },
   });
 }
+// 机构考核导出
+export async function exportOrgAssessment(params) {
+  const body = { ...params, method: 'exportOrgAssessment' };
+  return fetch(`${apiPath}orgAssessmentHandler`, {
+    method: 'POST',
+    credentials: 'include',
+    // expirys: false,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(body),
+  }).then(resp => resp.blob());
+}
+// 机构考核导入模版下载
+export async function downloadOrgAssessmentTemplate(params) {
+  const body = { ...params, method: 'downloadOrgAssessmentTemplate' };
+  return fetch(`${apiPath}orgAssessmentHandler`, {
+    method: 'POST',
+    credentials: 'include',
+    // expirys: false,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(body),
+  }).then(resp => resp.blob());
+}

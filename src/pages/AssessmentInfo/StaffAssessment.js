@@ -120,11 +120,11 @@ const CreateForm = Form.create()(props => {
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <FormItem label="考试时间">
+          <FormItem label="考试日期">
             {getFieldDecorator('KSSJ', {
               rules: [{ required: true, message: '选项不能为空！' }],
             })(
-              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试时间" />
+              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试日期" />
             )}
           </FormItem>
         </Col>

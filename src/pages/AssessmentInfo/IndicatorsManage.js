@@ -100,7 +100,7 @@ const CreateForm = Form.create()(props => {
               rules: [{ required: true, message: '不能为空！' }],
             })(
               <InputNumber
-                min={0}
+                min={1}
                 step={1}
                 placeholder="请输入数字序号"
                 style={{ width: '100%' }}
@@ -142,9 +142,9 @@ const CreateForm = Form.create()(props => {
 });
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ indicatorlist, loading }) => ({
-  indicatorlist,
-  loading: loading.models.indicatorlist,
+@connect(({ indicatorList, loading }) => ({
+  indicatorList,
+  loading: loading.models.indicatorList,
 }))
 @Form.create()
 class IndicatorsManage extends PureComponent {
@@ -159,7 +159,7 @@ class IndicatorsManage extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'indicatorlist/fetch',
+      type: 'indicatorList/fetch',
       payload: {
         selectData: {},
         token: getToken(),
@@ -199,7 +199,7 @@ class IndicatorsManage extends PureComponent {
     });
 
     dispatch({
-      type: 'indicatorlist/fetch',
+      type: 'indicatorList/fetch',
       payload: {
         selectData: params,
         token: getToken(),
@@ -219,7 +219,7 @@ class IndicatorsManage extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'indicatorlist/fetch',
+      type: 'indicatorList/fetch',
       payload: {
         selectData: {},
         token: getToken(),
@@ -245,7 +245,7 @@ class IndicatorsManage extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'indicatorlist/remove',
+          type: 'indicatorList/remove',
           payload: {
             selectData: params,
             deleteData: selectedRows.map(row => ({ KHZBDM: row.KHZBDM })),
@@ -277,7 +277,7 @@ class IndicatorsManage extends PureComponent {
       ...filter,
     };
     dispatch({
-      type: 'indicatorlist/remove',
+      type: 'indicatorList/remove',
       payload: {
         selectData: params,
         deleteData: [record].map(row => ({ KHZBDM: row.KHZBDM })),
@@ -319,7 +319,7 @@ class IndicatorsManage extends PureComponent {
       });
 
       dispatch({
-        type: 'indicatorlist/fetch',
+        type: 'indicatorList/fetch',
         payload: {
           selectData: params,
           token: getToken(),
@@ -349,7 +349,7 @@ class IndicatorsManage extends PureComponent {
     };
 
     dispatch({
-      type: 'indicatorlist/add',
+      type: 'indicatorList/add',
       payload: {
         token: getToken(),
         selectData: params,
@@ -414,7 +414,7 @@ class IndicatorsManage extends PureComponent {
 
   render() {
     const {
-      indicatorlist: { data },
+      indicatorList: { data },
       loading,
     } = this.props;
     const { sortedObj } = this.state;

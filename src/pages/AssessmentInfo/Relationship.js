@@ -11,9 +11,9 @@ const getValue = obj =>
     .join(',');
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ relationshiplist, loading }) => ({
-  relationshiplist,
-  loading: loading.models.relationshiplist,
+@connect(({ relationshipList, loading }) => ({
+  relationshipList,
+  loading: loading.models.relationshipList,
 }))
 @Form.create()
 class Relationship extends PureComponent {
@@ -29,7 +29,7 @@ class Relationship extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'relationshiplist/fetchleft',
+      type: 'relationshipList/fetchleft',
       payload: {
         side: 'left',
         selectData: {},
@@ -42,7 +42,7 @@ class Relationship extends PureComponent {
       },
     });
     dispatch({
-      type: 'relationshiplist/fetchright',
+      type: 'relationshipList/fetchright',
       payload: {
         side: 'right',
         selectData: {},
@@ -78,7 +78,7 @@ class Relationship extends PureComponent {
     });
 
     dispatch({
-      type: 'relationshiplist/fetchright',
+      type: 'relationshipList/fetchright',
       payload: {
         side: 'right',
         selectData: params,
@@ -124,7 +124,7 @@ class Relationship extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     dispatch({
-      type: 'relationshiplist/fetchleft',
+      type: 'relationshipList/fetchleft',
       payload: {
         side: 'left',
         selectData: params,
@@ -148,7 +148,7 @@ class Relationship extends PureComponent {
     this.setState({ clickedRowsLeft: { GW: row.GW } });
     const { dispatch } = this.props;
     dispatch({
-      type: 'relationshiplist/checkright',
+      type: 'relationshipList/checkright',
       payload: {
         side: 'right',
         selectData: { GW: row.GW },
@@ -172,7 +172,7 @@ class Relationship extends PureComponent {
     const { dispatch } = this.props;
     if (selectedRowKeysLeft.length <= 0) return;
     dispatch({
-      type: 'relationshiplist/match',
+      type: 'relationshipList/match',
       payload: {
         matchData: { left: selectedRowKeysLeft, right: selectedRowKeysRight },
         token: getToken(),
@@ -189,7 +189,7 @@ class Relationship extends PureComponent {
 
   render() {
     const {
-      relationshiplist: { dataLeft, dataRight },
+      relationshipList: { dataLeft, dataRight },
       loading,
     } = this.props;
     const { list: listLeft, pagination: paginationLeft } = dataLeft;

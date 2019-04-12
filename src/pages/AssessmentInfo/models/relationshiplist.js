@@ -1,7 +1,7 @@
 import { queryRelationship, matchRelationship, checkRelationship } from '@/services/assessmentinfo';
 
 export default {
-  namespace: 'relationshiplist',
+  namespace: 'relationshipList',
 
   state: {
     dataRight: {

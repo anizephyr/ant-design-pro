@@ -5,7 +5,7 @@ import {
 } from '@/services/assessmentinfo';
 
 export default {
-  namespace: 'indicatorlist',
+  namespace: 'indicatorList',
 
   state: {
     data: {
