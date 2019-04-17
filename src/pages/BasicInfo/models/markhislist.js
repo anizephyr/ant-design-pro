@@ -27,18 +27,22 @@ export default {
     },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addMarkHisList, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if (response.status) {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
       if (callback) callback(response);
     },
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeMarkHisList, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if (response.status) {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
       if (callback) callback(response);
     },
     *export({ payload, callback }, { call }) {

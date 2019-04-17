@@ -9,13 +9,14 @@ import {
   Form,
   Input,
   Button,
+  Select,
   Divider,
-  InputNumber,
   message,
-  DatePicker,
   Drawer,
   Upload,
   Popconfirm,
+  InputNumber,
+  notification,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -24,7 +25,7 @@ import { getToken } from '@/utils/authority';
 import styles from './StaffAssessment.less';
 
 const { TextArea } = Input;
-const { RangePicker } = DatePicker;
+const { Option } = Select;
 const FormItem = Form.Item;
 const getValue = obj =>
   Object.keys(obj)
@@ -33,7 +34,7 @@ const getValue = obj =>
 
 /* eslint react/no-multi-comp:0 */
 const CreateForm = Form.create()(props => {
-  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const { modalVisible, form, handleAdd, handleModalVisible, indicators, currentJob } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -41,94 +42,83 @@ const CreateForm = Form.create()(props => {
       handleAdd(fieldsValue);
     });
   };
+  const title = `${currentJob} 考核信息录入`;
   const { getFieldDecorator } = form;
-
+  const { list } = indicators;
+  const generateCreateFormBody =
+    list === undefined
+      ? {}
+      : list.map(item => {
+          const nodes = item.Nodes;
+          const generateChildrenBody = nodes.map(node => {
+            return (
+              <Col span={8} key={node.KHZBDM}>
+                <FormItem label={node.KHZB} style={{ marginBottom: '12px' }}>
+                  {getFieldDecorator(`${node.KHZBDM}`)(
+                    <InputNumber placeholder="请输入评分" style={{ width: '100%' }} step={0.1} />
+                  )}
+                </FormItem>
+              </Col>
+            );
+          });
+          return (
+            <Row gutter={16} key={item.ZXSX}>
+              {generateChildrenBody}
+            </Row>
+          );
+        });
   return (
     <Drawer
       width={500}
       destroyOnClose
-      title="积分信息录入"
+      title={title}
       visible={modalVisible}
       onClose={() => handleModalVisible()}
     >
       <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="机构名称">
-            {getFieldDecorator('JGMC', {
-              rules: [
-                { required: true, message: '机构名不能为空！' },
-                { max: 20, message: '机构名称过长！' },
-              ],
-            })(<Input placeholder="请输入机构名称" />)}
+        <Col span={8}>
+          <FormItem label="人员代码" style={{ marginBottom: '12px' }}>
+            {getFieldDecorator('RYDM', {
+              rules: [{ required: true, message: '人员代码不能为空！' }],
+            })(<Input placeholder="请输入人员代码" />)}
           </FormItem>
         </Col>
-        <Col span={12}>
-          <FormItem label="机构代码">
-            {getFieldDecorator('JGDM', {
-              rules: [{ required: true, message: '机构代码不能为空！' }],
-            })(<Input placeholder="请输入机构代码" />)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="姓名">
+        <Col span={8}>
+          <FormItem label="人员名称" style={{ marginBottom: '12px' }}>
             {getFieldDecorator('RYMC', {
-              rules: [{ required: true, message: '姓名不能为空！' }],
+              rules: [
+                { required: true, message: '姓名不能为空！' },
+                { max: 20, message: '姓名过长！' },
+              ],
             })(<Input placeholder="请输入姓名" />)}
           </FormItem>
         </Col>
-        <Col span={12}>
-          <FormItem label="十位工号">
-            {getFieldDecorator('RYDM', {
-              rules: [{ required: true, message: '十位工号错误！', len: 10 }],
-            })(<Input placeholder="请输入十位工号" />)}
-          </FormItem>
-        </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="岗位">
-            {getFieldDecorator('GW', {
-              rules: [{ required: true, message: '岗位不能为空！' }],
-            })(<Input placeholder="请输入岗位" />)}
+        <Col span={8}>
+          <FormItem label="考核年度" style={{ marginBottom: '12px' }}>
+            {getFieldDecorator('KHND', {
+              initialValue: moment().format('YYYY'),
+              rules: [{ required: true, message: '考核年度不能为空！' }],
+            })(<InputNumber placeholder="请输入考核年度" style={{ width: '100%' }} min={2017} />)}
           </FormItem>
         </Col>
-        <Col span={12}>
-          <FormItem label="考试项目">
-            {getFieldDecorator('XMMC', {
-              rules: [{ required: true, message: '项目名称不能为空！' }],
-            })(<Input placeholder="请输入项目名称" />)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="得分">
-            {getFieldDecorator('DF', {
-              rules: [{ required: true, message: '输入不能为空！' }],
-            })(<InputNumber placeholder="请输入得分" />)}
-          </FormItem>
-        </Col>
-        <Col span={12}>
-          <FormItem label="积分">
-            {getFieldDecorator('JF', {
-              rules: [{ required: true, message: '输入不能为空！' }],
-            })(<InputNumber placeholder="请输入积分" />)}
-          </FormItem>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <FormItem label="考试日期">
-            {getFieldDecorator('KSSJ', {
-              rules: [{ required: true, message: '选项不能为空！' }],
+        <Col span={8}>
+          <FormItem label="考核季度" style={{ marginBottom: '12px' }}>
+            {getFieldDecorator('KHJD', {
+              rules: [{ required: true, message: '考核季度不能为空！' }],
             })(
-              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择考试日期" />
+              <Select placeholder="请选择" style={{ width: '100%' }}>
+                <Option value="一季度">一季度</Option>
+                <Option value="二季度">二季度</Option>
+                <Option value="三季度">三季度</Option>
+                <Option value="四季度">四季度</Option>
+              </Select>
             )}
           </FormItem>
         </Col>
       </Row>
+      {generateCreateFormBody}
       <FormItem label="备注">
         {getFieldDecorator('BZ')(<TextArea row={2} placeholder="请输入备注" />)}
       </FormItem>
@@ -142,9 +132,9 @@ const CreateForm = Form.create()(props => {
     </Drawer>
   );
 });
-@connect(({ assessmentlist, loading }) => ({
-  assessmentlist,
-  loading: loading.models.assessmentlist,
+@connect(({ staffAssessmentList, loading }) => ({
+  staffAssessmentList,
+  loading: loading.models.staffAssessmentList,
 }))
 @Form.create()
 class StaffAssessment extends PureComponent {
@@ -153,46 +143,74 @@ class StaffAssessment extends PureComponent {
     expandRowByClick: true,
     selectedRows: [],
     formValues: {},
+    currentJob: null,
   };
 
   columns = [
     {
-      title: '工号',
-      dataIndex: 'RYDM',
+      title: '考核时段',
+      dataIndex: 'KHSD',
       width: 150,
     },
     {
       title: '机构代码',
       dataIndex: 'JGDM',
-      width: 150,
+      width: 100,
+    },
+    {
+      title: '工号',
+      dataIndex: 'RYDM',
+      width: 100,
+    },
+    {
+      title: '机构名称',
+      dataIndex: 'JGMC',
+      width: 100,
     },
     {
       title: '姓名',
       dataIndex: 'RYMC',
-      width: 150,
+      width: 100,
     },
     {
-      title: '现机构',
-      dataIndex: 'JGMC',
-      width: 150,
-    },
-    {
-      title: '现岗位',
+      title: '岗位',
       dataIndex: 'GW',
+      width: 100,
+    },
+    {
+      title: '总分',
+      dataIndex: 'ZF',
+      width: 100,
+      // sorter:true,
+    },
+    {
+      title: '',
+      dataIndex: 'BZ',
       width: 200,
     },
     {
-      title: '总积分',
-      dataIndex: 'ZJF',
-      width: 150,
-      // sorter:true,
+      title: '操作',
+      width: 100,
+      // fixed: 'right',
+      render: (text, data) => (
+        <Fragment>
+          <Popconfirm
+            title="确认删除？"
+            okText="确定"
+            cancelText="取消"
+            onConfirm={() => this.handleSingleDelete(data)}
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
+        </Fragment>
+      ),
     },
   ];
 
-  componentDidMount() {
+  componentWillMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'assessmentlist/fetch',
+      type: 'staffAssessmentList/fetchJobs',
       payload: {
         selectData: {},
         token: getToken(),
@@ -202,6 +220,26 @@ class StaffAssessment extends PureComponent {
           message.error(resp.msg);
         }
       },
+    });
+  }
+
+  componentDidMount() {
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      dispatch({
+        type: 'staffAssessmentList/fetch',
+        payload: {
+          selectData: fieldsValue,
+          token: getToken(),
+        },
+        callback: resp => {
+          if (!resp.status) {
+            message.error(resp.msg);
+          }
+        },
+      });
     });
   }
 
@@ -225,7 +263,7 @@ class StaffAssessment extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     dispatch({
-      type: 'assessmentlist/fetch',
+      type: 'staffAssessmentList/fetch',
       payload: {
         selectData: params,
         token: getToken(),
@@ -239,6 +277,11 @@ class StaffAssessment extends PureComponent {
   };
 
   handleModalVisible = flag => {
+    const { currentJob } = this.state;
+    if (currentJob === null) {
+      message.warn('请先选择岗位！');
+      return;
+    }
     this.setState({
       modalVisible: !!flag,
     });
@@ -251,7 +294,7 @@ class StaffAssessment extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'assessmentlist/fetch',
+      type: 'staffAssessmentList/fetch',
       payload: {
         selectData: {},
         token: getToken(),
@@ -259,6 +302,24 @@ class StaffAssessment extends PureComponent {
       callback: resp => {
         if (!resp.status) {
           message.error(resp.msg);
+        }
+      },
+    });
+  };
+
+  handleJobChange = job => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'staffAssessmentList/fetchIndicators',
+      payload: {
+        selectData: { GW: job },
+        token: getToken(),
+      },
+      callback: resp => {
+        if (!resp.status) {
+          message.error(resp.msg);
+        } else {
+          this.setState({ currentJob: job });
         }
       },
     });
@@ -273,7 +334,11 @@ class StaffAssessment extends PureComponent {
       if (resp.status) {
         message.success(`${info.file.name} 文件提交成功！`);
       } else {
-        message.error(`${info.file.name} 文件提交失败！${resp.msg}`, 7);
+        notification.error({
+          message: '数据导入失败',
+          description: `${info.file.name} 文件提交失败！\n${resp.msg}`,
+          duration: null,
+        });
       }
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} 文件提交失败！`);
@@ -285,16 +350,16 @@ class StaffAssessment extends PureComponent {
     const { selectedRows, formValues } = this.state;
     if (selectedRows.length === 0) return;
     dispatch({
-      type: 'assessmentlist/export',
+      type: 'staffAssessmentList/export',
       payload: {
         selectData: formValues,
-        exportData: selectedRows.map(row => `'${row.RYDM}'`),
+        exportData: selectedRows.map(row => ({ KHSD: row.KHSD, RYDM: row.RYDM })),
         token: getToken(),
       },
       callback: blob => {
         const aLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const fileName = '积分查询结果导出.xlsx';
+        const fileName = '人员考核结果导出.xlsx';
         aLink.href = url;
         aLink.download = fileName;
         aLink.click();
@@ -303,16 +368,22 @@ class StaffAssessment extends PureComponent {
   };
 
   handleDownloadTemplateClick = () => {
+    const { currentJob } = this.state;
+    if (currentJob === null) {
+      message.warn('请先选择岗位！');
+      return;
+    }
     const { dispatch } = this.props;
     dispatch({
-      type: 'assessmentlist/template',
+      type: 'staffAssessmentList/template',
       payload: {
+        selectData: { GW: currentJob },
         token: getToken(),
       },
       callback: blob => {
         const aLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
-        const fileName = '积分数据导入模版.xlsx';
+        const fileName = `人员考核数据导入模版_${currentJob}.xlsx`;
         aLink.href = url;
         aLink.download = fileName;
         aLink.click();
@@ -345,7 +416,7 @@ class StaffAssessment extends PureComponent {
       });
 
       dispatch({
-        type: 'assessmentlist/fetch',
+        type: 'staffAssessmentList/fetch',
         payload: {
           selectData: params,
           token: getToken(),
@@ -368,10 +439,10 @@ class StaffAssessment extends PureComponent {
       ...filter,
     };
     dispatch({
-      type: 'assessmentlist/remove',
+      type: 'staffAssessmentList/remove',
       payload: {
         selectData: params,
-        deleteData: [record].map(row => ({ ID: row.ID, JGDM: row.JGDM })),
+        deleteData: record.Children.map(child => child.ID),
         token: getToken(),
       },
       callback: resp => {
@@ -386,30 +457,20 @@ class StaffAssessment extends PureComponent {
 
   handleAdd = fields => {
     const { dispatch } = this.props;
-    const { sorter, filter, formValues } = this.state;
+    const { sorter, filter, formValues, currentJob } = this.state;
     const params = {
       sorter,
       ...formValues,
       ...filter,
+      currentJob,
     };
 
     dispatch({
-      type: 'assessmentlist/add',
+      type: 'staffAssessmentList/add',
       payload: {
         token: getToken(),
         selectData: params,
-        addData: {
-          JGMC: fields.JGMC,
-          RYMC: fields.RYMC,
-          JGDM: fields.JGDM,
-          RYDM: fields.RYDM,
-          GW: fields.GW,
-          XMMC: fields.XMMC,
-          DF: fields.DF,
-          JF: fields.JF,
-          KSSJ: moment(fields.KSSJ).format('YYYY-MM-DD'),
-          BZ: fields.BZ == null ? '' : fields.BZ,
-        },
+        addData: fields,
       },
       callback: resp => {
         if (resp.status) {
@@ -425,81 +486,38 @@ class StaffAssessment extends PureComponent {
   expandedRowRender = record => {
     const columns = [
       {
-        title: '工号',
-        dataIndex: 'RYDM',
-        width: 125,
+        title: '',
+        dataIndex: 'BLANK',
+        width: 80,
       },
       {
-        title: '机构代码',
-        dataIndex: 'JGDM',
-        width: 125,
+        title: '考核项目',
+        dataIndex: 'KHXM',
+        width: 150,
       },
       {
-        title: '姓名',
-        dataIndex: 'RYMC',
-        width: 125,
+        title: '考核指标',
+        dataIndex: 'KHZB',
+        width: 200,
       },
       {
-        title: '机构',
-        dataIndex: 'JGMC',
-        width: 125,
-      },
-      {
-        title: '岗位',
-        dataIndex: 'GW',
-        width: 125,
-      },
-      {
-        title: '考试项目',
-        dataIndex: 'XMMC',
-        width: 125,
+        title: '考核内容',
+        dataIndex: 'KHNR',
+        width: 400,
       },
       {
         title: '得分',
-        dataIndex: 'DF',
+        dataIndex: 'FS',
         width: 100,
-      },
-      {
-        title: '积分',
-        dataIndex: 'JF',
-        width: 100,
-      },
-      {
-        title: '考试时间',
-        dataIndex: 'KSSJ',
-        width: 150,
-        render: val => {
-          if (val === '') {
-            return '';
-          }
-          return <span>{moment(val).format('YYYY-MM-DD')}</span>;
-        },
       },
       {
         title: '备注',
         dataIndex: 'BZ',
-        width: 150,
-      },
-      {
-        title: '操作',
-        width: 150,
-        fixed: 'right',
-        render: (text, data) => (
-          <Fragment>
-            <Popconfirm
-              title="确认删除？"
-              okText="确定"
-              cancelText="取消"
-              onConfirm={() => this.handleSingleDelete(data)}
-            >
-              <a href="#">删除</a>
-            </Popconfirm>
-          </Fragment>
-        ),
+        width: 400,
       },
     ];
 
-    return <Table dataSource={record.MarkHis} columns={columns} pagination={false} rowKey="ID" />;
+    return <Table dataSource={record.Children} columns={columns} pagination={false} rowKey="ID" />;
   };
 
   renderAdvancedForm() {
@@ -515,20 +533,46 @@ class StaffAssessment extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="人员姓名">
-              {getFieldDecorator('RYMC')(<Input placeholder="请输入人员姓名" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="人员代码">
-              {getFieldDecorator('RYDM')(<Input placeholder="请输入人员工号" />)}
+            <FormItem label="机构名称">
+              {getFieldDecorator('JGMC')(<Input placeholder="请输入机构名称" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="积分时段">
-              {getFieldDecorator('JFSD')(<RangePicker format="YYYY-MM-DD" />)}
+            <FormItem label="人员代码">
+              {getFieldDecorator('RYDM')(<Input placeholder="请输入工号" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="人员名称">
+              {getFieldDecorator('RYMC')(<Input placeholder="请输入姓名" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="岗位">
+              {getFieldDecorator('GW')(<Input placeholder="请输入岗位" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={4} sm={24}>
+            <FormItem label="考核年度">
+              {getFieldDecorator('KHND', {
+                initialValue: moment().format('YYYY'),
+              })(<InputNumber min={2017} style={{ width: '100%' }} />)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}>
+            <FormItem label="考核季度">
+              {getFieldDecorator('KHJD')(
+                <Select placeholder="请选择">
+                  <Option value="一季度">一季度</Option>
+                  <Option value="二季度">二季度</Option>
+                  <Option value="三季度">三季度</Option>
+                  <Option value="四季度">四季度</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -547,12 +591,11 @@ class StaffAssessment extends PureComponent {
   }
 
   render() {
-    console.log(this.props);
     const {
-      assessmentlist: { data },
+      staffAssessmentList: { data, indicators, jobs },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, expandRowByClick } = this.state;
+    const { selectedRows, modalVisible, expandRowByClick, currentJob } = this.state;
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
@@ -564,16 +607,36 @@ class StaffAssessment extends PureComponent {
       showUploadList: true,
       headers: {
         Authorization: getToken(),
+        CurrentJob: encodeURI(currentJob),
       },
     };
+    const joblist = jobs.list;
+    const renderOptions =
+      joblist === undefined
+        ? ''
+        : joblist.map(job => {
+            return (
+              <Option key={job.GW} value={job.GW}>
+                {job.GW}
+              </Option>
+            );
+          });
     return (
       <PageHeaderWrapper title="">
         <Card bordered={false} bodyStyle={{ padding: '24px 24px' }}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
             <div className={styles.tableListOperator}>
+              <Select
+                className={styles.antSelect}
+                onChange={this.handleJobChange}
+                placeholder="请选择岗位"
+                loading={loading}
+              >
+                {renderOptions}
+              </Select>
               <Button icon="plus" onClick={() => this.handleModalVisible(true)}>
-                新增
+                录入
               </Button>
               {selectedRows.length > 0 && (
                 <Button key="export" icon="export" type="primary" onClick={this.handleExportClick}>
@@ -598,12 +661,17 @@ class StaffAssessment extends PureComponent {
               onChange={this.handleStandardTableChange}
               expandRowByClick={expandRowByClick}
               expandedRowRender={this.expandedRowRender}
-              rowKey="RYDM"
+              rowKey="ROWKEY"
               size="small"
             />
           </div>
         </Card>
-        <CreateForm {...parentMethods} modalVisible={modalVisible} />
+        <CreateForm
+          {...parentMethods}
+          modalVisible={modalVisible}
+          indicators={indicators}
+          currentJob={currentJob}
+        />
       </PageHeaderWrapper>
     );
   }

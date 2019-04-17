@@ -15,13 +15,14 @@ import {
   Drawer,
   Upload,
   Popconfirm,
+  notification,
   InputNumber,
 } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { getToken } from '@/utils/authority';
 
-import styles from './StaffAssessment.less';
+import styles from './OrgAssessment.less';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -45,7 +46,7 @@ const CreateForm = Form.create()(props => {
   const { list } = indicators;
   const generateCreateFormBody =
     list === undefined
-      ? {}
+      ? ''
       : list.map(item => {
           const nodes = item.Nodes;
           const generateChildrenBody = nodes.map(node => {
@@ -293,7 +294,11 @@ class OrgAssessment extends PureComponent {
       if (resp.status) {
         message.success(`${info.file.name} 文件提交成功！`);
       } else {
-        message.error(`${info.file.name} 文件提交失败！${resp.msg}`, 7);
+        notification.error({
+          message: '数据导入失败',
+          description: `${info.file.name} 文件提交失败！\n${resp.msg}`,
+          duration: null,
+        });
       }
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} 文件提交失败！`);

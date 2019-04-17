@@ -25,18 +25,22 @@ export default {
     },
     *add({ payload, callback }, { call, put }) {
       const response = yield call(addIndicatorList, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if (response.status) {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
       if (callback) callback(response);
     },
     *remove({ payload, callback }, { call, put }) {
       const response = yield call(removeIndicatorList, payload);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
+      if (response.status) {
+        yield put({
+          type: 'save',
+          payload: response,
+        });
+      }
       if (callback) callback(response);
     },
   },
