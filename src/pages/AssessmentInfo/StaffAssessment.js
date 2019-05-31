@@ -23,6 +23,7 @@ import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { getToken } from '@/utils/authority';
 
 import styles from './StaffAssessment.less';
+import Authorized from '@/utils/Authorized';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -109,10 +110,10 @@ const CreateForm = Form.create()(props => {
               rules: [{ required: true, message: '考核季度不能为空！' }],
             })(
               <Select placeholder="请选择" style={{ width: '100%' }}>
-                <Option value="一季度">一季度</Option>
-                <Option value="二季度">二季度</Option>
-                <Option value="三季度">三季度</Option>
-                <Option value="四季度">四季度</Option>
+                <Option value="1季度">一季度</Option>
+                <Option value="2季度">二季度</Option>
+                <Option value="3季度">三季度</Option>
+                <Option value="4季度">四季度</Option>
               </Select>
             )}
           </FormItem>
@@ -181,6 +182,7 @@ class StaffAssessment extends PureComponent {
       title: '总分',
       dataIndex: 'ZF',
       width: 100,
+      render: val => val.toFixed(2),
       // sorter:true,
     },
     {
@@ -567,10 +569,10 @@ class StaffAssessment extends PureComponent {
             <FormItem label="考核季度">
               {getFieldDecorator('KHJD')(
                 <Select placeholder="请选择">
-                  <Option value="一季度">一季度</Option>
-                  <Option value="二季度">二季度</Option>
-                  <Option value="三季度">三季度</Option>
-                  <Option value="四季度">四季度</Option>
+                  <Option value="1季度">一季度</Option>
+                  <Option value="2季度">二季度</Option>
+                  <Option value="3季度">三季度</Option>
+                  <Option value="4季度">四季度</Option>
                 </Select>
               )}
             </FormItem>
@@ -627,30 +629,32 @@ class StaffAssessment extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
             <div className={styles.tableListOperator}>
-              <Select
-                className={styles.antSelect}
-                onChange={this.handleJobChange}
-                placeholder="请选择岗位"
-                loading={loading}
-              >
-                {renderOptions}
-              </Select>
-              <Button icon="plus" onClick={() => this.handleModalVisible(true)}>
-                录入
-              </Button>
               {selectedRows.length > 0 && (
                 <Button key="export" icon="export" type="primary" onClick={this.handleExportClick}>
                   批量导出
                 </Button>
               )}
-              <Button icon="download" type="dashed" onClick={this.handleDownloadTemplateClick}>
-                导入模版下载
-              </Button>
-              <Upload {...uploadProps} onChange={this.handleUploadChange}>
-                <Button icon="import" type="primary">
-                  数据导入
+              <Authorized current authority={['creator', 'admin']}>
+                <Select
+                  className={styles.antSelect}
+                  onChange={this.handleJobChange}
+                  placeholder="请选择岗位"
+                  loading={loading}
+                >
+                  {renderOptions}
+                </Select>
+                <Button icon="plus" onClick={() => this.handleModalVisible(true)}>
+                  录入
                 </Button>
-              </Upload>
+                <Button icon="download" type="dashed" onClick={this.handleDownloadTemplateClick}>
+                  导入模版下载
+                </Button>
+                <Upload {...uploadProps} onChange={this.handleUploadChange}>
+                  <Button icon="import" type="primary">
+                    数据导入
+                  </Button>
+                </Upload>
+              </Authorized>
             </div>
             <StandardTable
               selectedRows={selectedRows}

@@ -197,13 +197,13 @@ class Relationship extends PureComponent {
     const paginationPropsLeft = {
       showSizeChanger: false,
       showQuickJumper: false,
-      pageSizeOptions: ['10', '50', '100'],
+      pageSizeOptions: ['20', '50', '100'],
       ...paginationLeft,
     };
     const paginationPropsRight = {
       showSizeChanger: false,
       showQuickJumper: false,
-      pageSizeOptions: ['10', '50', '100'],
+      pageSizeOptions: ['20', '50', '100'],
       ...paginationRight,
     };
     const { sortedObjRight } = this.state;

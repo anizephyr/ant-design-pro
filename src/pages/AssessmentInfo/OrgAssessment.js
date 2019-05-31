@@ -108,10 +108,10 @@ const CreateForm = Form.create()(props => {
               rules: [{ required: true, message: '考核季度不能为空！' }],
             })(
               <Select placeholder="请选择" style={{ width: '100%' }}>
-                <Option value="一季度">一季度</Option>
-                <Option value="二季度">二季度</Option>
-                <Option value="三季度">三季度</Option>
-                <Option value="四季度">四季度</Option>
+                <Option value="1季度">一季度</Option>
+                <Option value="2季度">二季度</Option>
+                <Option value="3季度">三季度</Option>
+                <Option value="4季度">四季度</Option>
               </Select>
             )}
           </FormItem>
@@ -164,6 +164,7 @@ class OrgAssessment extends PureComponent {
       title: '总分',
       dataIndex: 'ZF',
       width: 100,
+      render: val => val.toFixed(2),
       // sorter:true,
     },
     {
@@ -503,10 +504,10 @@ class OrgAssessment extends PureComponent {
             <FormItem label="考核季度">
               {getFieldDecorator('KHJD')(
                 <Select placeholder="请选择">
-                  <Option value="一季度">一季度</Option>
-                  <Option value="二季度">二季度</Option>
-                  <Option value="三季度">三季度</Option>
-                  <Option value="四季度">四季度</Option>
+                  <Option value="1季度">一季度</Option>
+                  <Option value="2季度">二季度</Option>
+                  <Option value="3季度">三季度</Option>
+                  <Option value="4季度">四季度</Option>
                 </Select>
               )}
             </FormItem>
