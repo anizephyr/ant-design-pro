@@ -137,7 +137,11 @@ const CreateForm = Form.create()(props => {
             {getFieldDecorator('JRGZCYSJ', {
               rules: [{ required: true, message: '请选择从业时间！' }],
             })(
-              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择从业时间" />
+              <DatePicker
+                style={{ width: '100%' }}
+                format="YYYY-MM-DD"
+                placeholder="选择从业时间"
+              />
             )}
           </FormItem>
         </Col>
@@ -149,7 +153,7 @@ const CreateForm = Form.create()(props => {
               <DatePicker
                 style={{ width: '100%' }}
                 format="YYYY-MM-DD"
-                laceholder="选择运营岗位上岗时间"
+                placeholder="选择运营岗位上岗时间"
               />
             )}
           </FormItem>
@@ -159,7 +163,11 @@ const CreateForm = Form.create()(props => {
             {getFieldDecorator('RHSJ', {
               rules: [{ required: true, message: '请选择入行时间！' }],
             })(
-              <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择入行时间" />
+              <DatePicker
+                style={{ width: '100%' }}
+                format="YYYY-MM-DD"
+                placeholder="选择入行时间"
+              />
             )}
           </FormItem>
         </Col>
@@ -180,7 +188,7 @@ const CreateForm = Form.create()(props => {
               <DatePicker
                 style={{ width: '100%' }}
                 format="YYYY-MM-DD"
-                laceholder="选择现岗位上岗时间"
+                placeholder="选择现岗位上岗时间"
               />
             )}
           </FormItem>
@@ -436,7 +444,7 @@ class UpdateForm extends PureComponent {
         {form.getFieldDecorator('XGWSGSJ', {
           rules: [{ required: true, message: '请选择上岗时间！' }],
           initialValue: formVals.XGWSGSJ,
-        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" laceholder="选择上岗时间" />)}
+        })(<DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" placeholder="选择上岗时间" />)}
       </FormItem>,
       <FormItem key="HYQK" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="婚姻情况">
         {form.getFieldDecorator('HYQK', {
